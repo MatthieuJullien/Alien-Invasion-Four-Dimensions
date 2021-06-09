@@ -8,6 +8,7 @@ public class PlayerWeaponController : MonoBehaviour
 
     private int currentWeaponIndex = 0;
     private bool isCurrentViewFPS;
+
     private Weapon currentWeapon
     {
         get
@@ -21,6 +22,7 @@ public class PlayerWeaponController : MonoBehaviour
 
     private void Start()
     {
+
         Assert.AreEqual(fpsWeaponList.Length, worldWeaponList.Length);
 
         for (int i = 0; i < fpsWeaponList.Length; i++)
@@ -46,15 +48,17 @@ public class PlayerWeaponController : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            currentWeapon.Fire();
+            currentWeapon.Fire(currentWeaponIndex);
         }
     }
 
     private void SwitchNextWeapon()
     {
+
         currentWeapon.gameObject.SetActive(false);
         currentWeaponIndex = (currentWeaponIndex + 1) % worldWeaponList.Length;
         UpdateActiveWeaponView();
+
     }
 
     private void UpdateActiveWeaponView()
