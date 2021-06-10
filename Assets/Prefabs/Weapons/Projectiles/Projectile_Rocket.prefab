@@ -111,6 +111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeDuration: 10
   damage: 100
+  hitVFX: {fileID: 7924910502674083684, guid: 6d0fecf3475884c4db94adfc10f1b509, type: 3}
   moveForce: 70
 --- !u!54 &5161368102314650176
 Rigidbody:

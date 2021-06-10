@@ -22,7 +22,7 @@ public class Alien : MonoBehaviour
 
     private void Die()
     {
-        Instantiate(deathVFX, transform);
+        Instantiate(deathVFX, transform.position, transform.rotation);
         Destroy(gameObject);
     }
 }

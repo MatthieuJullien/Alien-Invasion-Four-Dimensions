@@ -1,11 +1,10 @@
-using System;
 using UnityEngine;
 
 public abstract class Projectile : MonoBehaviour
 {
     [SerializeField] protected float lifeDuration = 5f;
     [SerializeField] protected float damage = 10;
-
+    [SerializeField] private GameObject hitVFX;
 
     protected float spawnTime;
 
@@ -35,6 +34,7 @@ public abstract class Projectile : MonoBehaviour
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
+        Instantiate(hitVFX, transform.position, transform.rotation);
         InflictDamage(collision);
         Explode();
     }
