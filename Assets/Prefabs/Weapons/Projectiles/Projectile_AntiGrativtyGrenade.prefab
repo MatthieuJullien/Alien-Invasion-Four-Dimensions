@@ -71,6 +71,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeDuration: 2
+  damage: 0
   throwForce: 10
   explosionRadius: 7
   pullPower: 500

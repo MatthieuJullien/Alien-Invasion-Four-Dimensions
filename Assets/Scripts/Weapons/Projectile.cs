@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 
 public abstract class Projectile : MonoBehaviour
 {
     [SerializeField] protected float lifeDuration = 5f;
+    [SerializeField] protected float damage = 10;
+
 
     protected float spawnTime;
 
@@ -32,6 +35,16 @@ public abstract class Projectile : MonoBehaviour
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
+        InflictDamage(collision);
         Explode();
+    }
+
+    protected void InflictDamage(Collision collision)
+    {
+        Health otherHealth = collision.gameObject.GetComponent<Health>();
+        if (otherHealth != null)
+        {
+            otherHealth.TakeDamage(damage);
+        }
     }
 }

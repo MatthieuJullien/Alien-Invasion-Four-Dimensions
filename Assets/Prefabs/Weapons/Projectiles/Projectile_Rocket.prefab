@@ -110,6 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeDuration: 10
+  damage: 100
   moveForce: 70
 --- !u!54 &5161368102314650176
 Rigidbody:
