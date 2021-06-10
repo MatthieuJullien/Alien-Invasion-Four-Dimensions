@@ -1,33 +1,37 @@
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public abstract class Projectile : MonoBehaviour
 {
-    [SerializeField] private float speed = 20f; // TODO not use by physic moving projectiles
     [SerializeField] protected float lifeDuration = 5f;
-    [SerializeField] private bool isKinematic;
-
-    public bool IsKinematic { get => isKinematic; }
 
     protected float spawnTime;
 
+    public abstract void Explode();
+
     protected void Start()
+    {
+        Physics.IgnoreLayerCollision(9, 9);
+        Physics.IgnoreLayerCollision(9, 8);
+        Physics.IgnoreLayerCollision(9, 7);
+        Physics.IgnoreLayerCollision(9, 6);
+    }
+
+    public virtual void Shoot()
     {
         spawnTime = Time.time;
     }
 
+
     protected virtual void Update()
     {
-        if (!IsKinematic)
-            transform.Translate(speed * Time.deltaTime * Vector3.forward);
-
         if (Time.time >= spawnTime + lifeDuration)
         {
-            Destroy(gameObject);
+            Explode();
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnCollisionEnter(Collision collision)
     {
-        Destroy(gameObject);
+        Explode();
     }
 }

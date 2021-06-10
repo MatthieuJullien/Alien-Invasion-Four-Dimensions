@@ -5,7 +5,6 @@ public class Weapon : MonoBehaviour
 {
     [SerializeField] protected Transform[] projectileSpawnPoints;
     [SerializeField] protected Projectile projectilePrefab;
-    [SerializeField] private float throwForce;
     [SerializeField] private float reloadDuration;
 
     private Animation animationReader;
@@ -34,11 +33,9 @@ public class Weapon : MonoBehaviour
         foreach (Transform spawn in projectileSpawnPoints)
         {
             Projectile projectile = Instantiate<Projectile>(projectilePrefab, spawn.position, spawn.rotation);
-            if (projectilePrefab.IsKinematic)
-            {
-                projectile.GetComponent<Rigidbody>().AddForce(spawn.forward * throwForce);
-            }
+            projectile.Shoot();
         }
+
         animationReader.Play();
         lastFireTime = Time.time;
         isLoaded = false;

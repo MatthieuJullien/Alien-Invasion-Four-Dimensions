@@ -12,6 +12,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private Camera fpsCamera;
     [SerializeField] private Camera worldCamera;
     [SerializeField] private Camera isoCamera;
+    [SerializeField] private Transform worldWeaponTransorm;
+
 
     [SerializeField] private Transform playerTransform;
 
@@ -137,7 +139,7 @@ public class GameManager : Singleton<GameManager>
         Vector3 eulerAngles = fpsCamera.transform.rotation.eulerAngles;
         eulerAngles.x = 0f;
         fpsCamera.transform.rotation = Quaternion.Euler(eulerAngles);
-
+        worldWeaponTransorm.rotation = Quaternion.Euler(eulerAngles);
         worldCamera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
 
         fpsCamera.enabled = false;

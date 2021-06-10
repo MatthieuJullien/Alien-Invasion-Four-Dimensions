@@ -12,8 +12,6 @@ public class ConstrainedMouseLook : MouseLook
 {
     [SerializeField] private List<LookFollower> lookFollowers;
 
-    private float sideViewYawAccu = 0f;
-
     public override void LookRotation(CharacterMovement movement, Transform cameraTransform)
     {
         switch (GameManager.Instance.ViewPoint)
@@ -57,12 +55,11 @@ public class ConstrainedMouseLook : MouseLook
 
         if (GameManager.Instance.ViewPoint == PlayerViewPoint.SideView)
         {
-            sideViewYawAccu += yaw;
-            if (sideViewYawAccu > 0)
+            if (yaw > 0)
             {
                 movement.rotation = Quaternion.LookRotation(Vector3.right);
             }
-            else if (sideViewYawAccu < 0)
+            else if (yaw < 0)
             {
                 movement.rotation = Quaternion.LookRotation(Vector3.left);
             }
