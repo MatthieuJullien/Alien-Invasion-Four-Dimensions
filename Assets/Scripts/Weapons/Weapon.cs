@@ -24,7 +24,7 @@ public class Weapon : MonoBehaviour
 
     private void Start()
     {
-        audioMan = AudioManager.GetInstance();
+        audioMan = AudioManager.Instance;
         weapons = audioMan.PlayerWeapons;
         wSwitch = audioMan.WeaponSwitch;
 

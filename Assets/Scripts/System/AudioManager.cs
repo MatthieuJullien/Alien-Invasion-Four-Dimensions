@@ -1,8 +1,8 @@
-public class AudioManager
+public class AudioManager : Singleton<AudioManager>
 
 {
 
-    private static AudioManager instanceAudioMan;
+    //private static AudioManager instanceAudioMan;
 
     public FMOD.Studio.EventInstance PlayerWeapons { get; private set; }
     public FMOD.Studio.PARAMETER_ID WeaponSwitch { get; private set; }
@@ -19,7 +19,7 @@ public class AudioManager
         WeaponSwitch = playerParameterDescription.id;
     }
 
-
+    /*
     public static AudioManager GetInstance()
     {
         if (instanceAudioMan == null)
@@ -27,7 +27,7 @@ public class AudioManager
             instanceAudioMan = new AudioManager();
         }
         return instanceAudioMan;
-    }
+    }*/
 
 
     public void Play(FMOD.Studio.EventInstance pEvent)
