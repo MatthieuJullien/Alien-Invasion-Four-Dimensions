@@ -8,10 +8,14 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float throwForce;
     [SerializeField] private float reloadDuration;
 
+
+    private static AudioManager audioMan;
+    private FMOD.Studio.EventInstance weapons;
+    private FMOD.Studio.PARAMETER_ID wSwitch;
+
     private Animation animationReader;
     private bool isLoaded = true;
     private float lastFireTime;
-    private FMOD.Studio.EventInstance weaponEvent;
 
     private void Awake()
     {
@@ -20,7 +24,9 @@ public class Weapon : MonoBehaviour
 
     private void Start()
     {
-        weaponEvent = FMODUnity.RuntimeManager.CreateInstance("event:/SFX/Player/Weapons");
+        audioMan = AudioManager.GetInstance();
+        weapons = audioMan.PlayerWeapons;
+        wSwitch = audioMan.WeaponSwitch;
 
         animationReader.clip.legacy = true;
         if (animationReader.clip.length > reloadDuration)
@@ -34,8 +40,10 @@ public class Weapon : MonoBehaviour
         if (!isLoaded)
             return;
 
-        weaponEvent.setParameterByName("weapons", index);
-        weaponEvent.start();
+        //setting switch to current weapon
+        audioMan.SetLabeledParameter(weapons, wSwitch, index);
+        //playing sound
+        audioMan.Play(weapons);
 
         foreach (Transform spawn in projectileSpawnPoints)
         {
