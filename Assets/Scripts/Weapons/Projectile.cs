@@ -6,6 +6,8 @@ public abstract class Projectile : MonoBehaviour
     [SerializeField] protected float damage = 10;
     [SerializeField] private GameObject hitVFX;
 
+    private Vector3 from;
+
     protected float spawnTime;
 
     public abstract void Explode();
@@ -16,6 +18,7 @@ public abstract class Projectile : MonoBehaviour
         Physics.IgnoreLayerCollision(9, 8);
         Physics.IgnoreLayerCollision(9, 7);
         Physics.IgnoreLayerCollision(9, 6);
+        from = transform.position;
     }
 
     public virtual void Shoot()
@@ -34,7 +37,8 @@ public abstract class Projectile : MonoBehaviour
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
-        Instantiate(hitVFX, transform.position, transform.rotation);
+        Quaternion hitOrientation = Quaternion.LookRotation(collision.GetContact(0).normal);
+        Instantiate(hitVFX, transform.position, hitOrientation);
         InflictDamage(collision);
         Explode();
     }
