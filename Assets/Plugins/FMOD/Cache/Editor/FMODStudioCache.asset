@@ -23,6 +23,26 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 0
+--- !u!114 &-8331241059918446807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Weapons/weapons
+  m_EditorClassIdentifier: 
+  Name: weapons
+  Min: 0
+  Max: 3
+  Default: 1
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-7770163267612401866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38,11 +58,51 @@ MonoBehaviour:
   Path: FmodBanks/Desktop/Music.bank
   Name: Desktop/Music
   StudioPath: bank:/Music
-  lastModified: 637589267710000000
+  lastModified: 637589961550000000
   LoadResult: 0
   FileSizes: []
   Exists: 1
+--- !u!114 &-7377126908268238875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/reverb
+  m_EditorClassIdentifier: 
+  Name: reverb
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2499299429
+    data2: 235551422
+  Exists: 0
 --- !u!114 &-5398959116240527928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Weapons/weapons
+  m_EditorClassIdentifier: 
+  Name: weapons
+  Min: 0
+  Max: 3
+  Default: 1
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
+--- !u!114 &-5251662593577392251
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -164,7 +224,7 @@ MonoBehaviour:
   Path: FmodBanks/Desktop/UI.bank
   Name: Desktop/UI
   StudioPath: bank:/UI
-  lastModified: 637589267720000000
+  lastModified: 637589961550000000
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -198,7 +258,7 @@ MonoBehaviour:
   - {fileID: 2874824375523116146}
   StringsBanks:
   - {fileID: 3570120906322636202}
-  stringsBankWriteTime: 637589267710000000
+  stringsBankWriteTime: 637589961550000000
   cacheVersion: 6
 --- !u!114 &449567166526616235
 MonoBehaviour:
@@ -263,6 +323,26 @@ MonoBehaviour:
     data1: 2499299429
     data2: 235551422
   Exists: 0
+--- !u!114 &2666240979629785196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/reverb
+  m_EditorClassIdentifier: 
+  Name: reverb
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 2499299429
+    data2: 235551422
+  Exists: 0
 --- !u!114 &2874824375523116146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,7 +358,7 @@ MonoBehaviour:
   Path: FmodBanks/Desktop/Master.bank
   Name: Desktop/Master
   StudioPath: bank:/Master
-  lastModified: 637589267710000000
+  lastModified: 637589961550000000
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -297,7 +377,7 @@ MonoBehaviour:
   Path: FmodBanks/Desktop/Master.strings.bank
   Name: Desktop/Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637589267710000000
+  lastModified: 637589961550000000
   LoadResult: 0
   FileSizes:
   - Name: 
@@ -462,16 +542,16 @@ MonoBehaviour:
   m_Name: event:/SFX/Player/Weapons
   m_EditorClassIdentifier: 
   Path: event:/SFX/Player/Weapons
-  guid: 749cd3bca15fda459d8f473ed05aa02e
+  guid: de308988167ddc4fb79901c97820e123
   Banks:
   - {fileID: 8809763028649310446}
   IsStream: 0
-  Is3D: 0
+  Is3D: 1
   IsOneShot: 1
   Parameters:
-  - {fileID: -3750483369733223277}
-  MinDistance: 0
-  MaxDistance: 0
+  - {fileID: -5251662593577392251}
+  MinDistance: 1
+  MaxDistance: 20
   Length: 2054
 --- !u!114 &8809763028649310446
 MonoBehaviour:
@@ -488,7 +568,7 @@ MonoBehaviour:
   Path: FmodBanks/Desktop/SFX.bank
   Name: Desktop/SFX
   StudioPath: bank:/SFX
-  lastModified: 637589267720000000
+  lastModified: 637589961550000000
   LoadResult: 0
   FileSizes: []
   Exists: 1
