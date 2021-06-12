@@ -1,6 +1,4 @@
 using UnityEngine;
-using ECM.Controllers;
-using System;
 
 public enum PlayerViewPoint
 {
@@ -14,6 +12,13 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private Camera isoCamera;
     [SerializeField] private Transform worldWeaponTransform;
     [SerializeField] private Transform playerTransform;
+
+    [Header("Movement Config ScriptableObjects")]
+    [SerializeField] private MovementConfig topConfig;
+    [SerializeField] private MovementConfig sideConfig;
+    [SerializeField] private MovementConfig fpsMvtCfg;
+    [SerializeField] private MovementConfig isoMvtCfg;
+
 
     private Rigidbody playerRigidbody;
     private CharacterMovement playerMovement;
@@ -38,11 +43,8 @@ public class GameManager : Singleton<GameManager>
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (Input.GetMouseButtonDown(1))
         {
-            //  ResetDefaultValues
-            playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-
             viewIndex = (viewIndex + 1) % 4;
             switch (viewIndex)
             {
@@ -70,28 +72,32 @@ public class GameManager : Singleton<GameManager>
         switch (ViewPoint)
         {
             case PlayerViewPoint.Isometric:
-                playerController.baseJumpHeight = 1.8f;
-                playerController.extraJumpPower = 25f;
-                playerController.speed = 8f;
-                playerController.runSpeedMultiplier = 1.6f;
+                playerController.baseJumpHeight = isoMvtCfg.baseJumpHeight;
+                playerController.extraJumpPower = isoMvtCfg.extraJumpPower;
+                playerController.speed = isoMvtCfg.speed;
+                playerController.runSpeedMultiplier = isoMvtCfg.runSpeedMultiplier;
+                playerController.airControl = isoMvtCfg.airControl;
                 break;
             case PlayerViewPoint.TopDown:
-                playerController.baseJumpHeight = 0f;
-                playerController.extraJumpPower = 0f;
-                playerController.speed = 8f;
-                playerController.runSpeedMultiplier = 2;
+                playerController.baseJumpHeight = topConfig.baseJumpHeight;
+                playerController.extraJumpPower = topConfig.extraJumpPower;
+                playerController.speed = topConfig.speed;
+                playerController.runSpeedMultiplier = topConfig.runSpeedMultiplier;
+                playerController.airControl = topConfig.airControl;
                 break;
             case PlayerViewPoint.SideView:
-                playerController.baseJumpHeight = 2f;
-                playerController.extraJumpPower = 25f;
-                playerController.speed = 12f;
-                playerController.runSpeedMultiplier = 1.5f;
+                playerController.baseJumpHeight = sideConfig.baseJumpHeight;
+                playerController.extraJumpPower = sideConfig.extraJumpPower;
+                playerController.speed = sideConfig.speed;
+                playerController.runSpeedMultiplier = sideConfig.runSpeedMultiplier;
+                playerController.airControl = sideConfig.airControl;
                 break;
             case PlayerViewPoint.FirstPerson:
-                playerController.baseJumpHeight = 1.6f;
-                playerController.extraJumpPower = 25f;
-                playerController.speed = 12f;
-                playerController.runSpeedMultiplier = 1.5f;
+                playerController.baseJumpHeight = fpsMvtCfg.baseJumpHeight;
+                playerController.extraJumpPower = fpsMvtCfg.extraJumpPower;
+                playerController.speed = fpsMvtCfg.speed;
+                playerController.runSpeedMultiplier = fpsMvtCfg.runSpeedMultiplier;
+                playerController.airControl = fpsMvtCfg.airControl;
                 break;
             default:
                 break;
@@ -102,7 +108,7 @@ public class GameManager : Singleton<GameManager>
     public void SelectIso()
     {
         ViewPoint = PlayerViewPoint.Isometric;
-
+        playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
         worldCamera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
 
@@ -116,6 +122,7 @@ public class GameManager : Singleton<GameManager>
     public void SelectTopDown()
     {
         ViewPoint = PlayerViewPoint.TopDown;
+        playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
         // put arms horizontally
         Vector3 eulerAngles = fpsCamera.transform.rotation.eulerAngles;
@@ -134,6 +141,7 @@ public class GameManager : Singleton<GameManager>
     public void SelectSideView()
     {
         ViewPoint = PlayerViewPoint.SideView;
+        playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
         playerMovement.cachedRigidbody.MoveRotation(Quaternion.LookRotation(Vector3.right));
         playerRigidbody.constraints |= RigidbodyConstraints.FreezePositionZ;
@@ -151,6 +159,7 @@ public class GameManager : Singleton<GameManager>
     public void SelectFPS()
     {
         ViewPoint = PlayerViewPoint.FirstPerson;
+        playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
         fpsCamera.enabled = true;
         worldCamera.enabled = false;

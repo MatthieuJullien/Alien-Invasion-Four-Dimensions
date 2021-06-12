@@ -3,14 +3,14 @@ using UnityEngine;
 [RequireComponent(typeof(Animation))]
 public class Weapon : MonoBehaviour
 {
-    [SerializeField] private float reloadDuration;
+    [SerializeField] private float reloadDuration = 1f;
     [SerializeField] protected Projectile projectilePrefab;
     [SerializeField] protected Transform[] fpsProjectileSpawnPoints;
     [SerializeField] protected Transform[] worldProjectileSpawnPoints;
     [SerializeField] private GameObject fpsModel;
     [SerializeField] private GameObject worldModel;
 
-    private float reloadTimer = 0f;
+    private float reloadTimer = Mathf.Infinity;
     private Animation animationReader;
     private Animation fpsAnim;
     private Animation worldAnim;

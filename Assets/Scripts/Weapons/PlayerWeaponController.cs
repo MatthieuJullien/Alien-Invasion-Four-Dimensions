@@ -5,7 +5,7 @@ public class PlayerWeaponController : MonoBehaviour
     [SerializeField] private Weapon[] weapons;
     [SerializeField] private float switchWeaponCooldown = 0.2f;
 
-    private float weaponSwitchTimer = 0f;
+    private float weaponSwitchTimer = Mathf.Infinity;
     private int currentWeaponIndex;
     private bool isCurrentViewFPS;
 

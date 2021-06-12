@@ -1,302 +1,132 @@
 ﻿using UnityEngine;
 
-namespace ECM.Controllers
+public class MultipleViewPlayerController : BaseCharacterController
 {
-    /// <summary>
-    /// Base First Person Controller.
-    /// 
-    /// Base class for a first person controller.
-    /// It inherits from 'BaseCharacterController' and extends it to perform classic FPS movement.
-    /// 
-    /// As the base character controllers, this default behaviour can easily be modified or completely replaced in a derived class. 
-    /// </summary>
+    [SerializeField] private float forwardSpeed = 5.0f;
+    [SerializeField] private float backwardSpeed = 3.0f;
+    [SerializeField] private float strafeSpeed = 4.0f;
+    public float runSpeedMultiplier = 2.0f;
 
-    public class MultipleViewPlayerController : BaseCharacterController
+    public Transform CameraPivotTransform { get; private set; }
+    public Transform CameraTransform { get; private set; }
+    public MouseLook MouseLook { get; private set; }
+    public bool Run { get; set; }
+
+    protected virtual void RotateView()
     {
-        #region EDITOR EXPOSED FIELDS
+        MouseLook.LookRotation(movement, CameraTransform);
+    }
 
-        [Header("First Person")]
-        [Tooltip("Speed when moving forward.")]
-        [SerializeField]
-        private float _forwardSpeed = 5.0f;
+    protected override void UpdateRotation()
+    {
+        RotateView();
+    }
 
-        [Tooltip("Speed when moving backwards.")]
-        [SerializeField]
-        private float _backwardSpeed = 3.0f;
+    protected virtual float GetTargetSpeed()
+    {
+        float targetSpeed = forwardSpeed;
 
-        [Tooltip("Speed when moving sideways.")]
-        [SerializeField]
-        private float _strafeSpeed = 4.0f;
+        if (moveDirection.x > 0.0f || moveDirection.x < 0.0f)
+            targetSpeed = strafeSpeed;
 
-        [Tooltip("Speed multiplier while running.")]
-        [SerializeField]
-        private float _runSpeedMultiplier = 2.0f;
+        if (moveDirection.z < 0.0f)
+            targetSpeed = backwardSpeed;
 
-        #endregion
+        // forward speed should take precedence
+        if (moveDirection.z > 0.0f)
+            targetSpeed = forwardSpeed;
 
-        #region PROPERTIES
+        return Run ? targetSpeed * runSpeedMultiplier : targetSpeed;
+    }
 
-        /// <summary>
-        /// Cached camera pivot transform.
-        /// </summary>
-        public Transform cameraPivotTransform { get; private set; }
+    protected override void Move()
+    {
+        Vector3 desiredVelocity = CalcDesiredVelocity();
 
-        /// <summary>
-        /// Cached camera transform.
-        /// </summary>
-        public Transform cameraTransform { get; private set; }
+        var currentFriction = isGrounded ? groundFriction : airFriction;
+        var currentBrakingFriction = useBrakingFriction ? brakingFriction : currentFriction;
 
-        /// <summary>
-        /// Cached MouseLook component.
-        /// </summary>
-        public MouseLook mouseLook { get; private set; }
+        movement.Move(desiredVelocity, speed * runSpeedMultiplier, acceleration, deceleration, currentFriction,
+            currentBrakingFriction, !allowVerticalMovement);
 
-        /// <summary>
-        /// Speed when moving forward.
-        /// </summary>
-        public float forwardSpeed
+        // Jump logic
+        Jump();
+        MidAirJump();
+        UpdateJumpTimer();
+    }
+
+    protected override Vector3 CalcDesiredVelocity()
+    {
+        if (GameManager.Instance.ViewPoint == PlayerViewPoint.TopDown || GameManager.Instance.ViewPoint == PlayerViewPoint.Isometric)
         {
-            get { return _forwardSpeed; }
-            set { _forwardSpeed = Mathf.Max(0.0f, value); }
+            Vector3 desiredVelocity = base.CalcDesiredVelocity();
+            desiredVelocity *= Run ? runSpeedMultiplier : 1f;
+            return desiredVelocity;
+        }
+        else
+        {
+            speed = GetTargetSpeed();
+            return transform.TransformDirection(base.CalcDesiredVelocity());
+        }
+    }
+
+    protected override void HandleInput()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+            pause = !pause;
+
+        int forward = 0;
+        int right = 0;
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.Z))
+        {
+            forward++;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            forward--;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            right++;
+        }
+        if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.A))
+        {
+            right--;
         }
 
-        /// <summary>
-        /// Speed when moving backwards.
-        /// </summary>
-        public float backwardSpeed
+        if (GameManager.Instance.ViewPoint == PlayerViewPoint.SideView)
         {
-            get { return _backwardSpeed; }
-            set { _backwardSpeed = Mathf.Max(0.0f, value); }
+            jump = (forward == 1) || Input.GetButton("Jump");
+            forward = (int)Mathf.Sign(Vector3.Dot(transform.forward, Vector3.right)) * right;
+            right = 0;
+        }
+        else
+        {
+            jump = Input.GetButton("Jump");
         }
 
-        /// <summary>
-        /// Speed when moving sideways.
-        /// </summary>
-        public float strafeSpeed
+        moveDirection = new Vector3
         {
-            get { return _strafeSpeed; }
-            set { _strafeSpeed = Mathf.Max(0.0f, value); }
+            x = right,
+            y = 0.0f,
+            z = forward
+        };
+
+        Run = Input.GetButton("Fire3");
+    }
+    public override void Awake()
+    {
+        base.Awake();
+
+        MouseLook = GetComponent<MouseLook>();
+        CameraPivotTransform = transform.Find("Camera_Pivot");
+        if (CameraPivotTransform == null)
+        {
+            Debug.LogError($"BaseFPSController: No 'Camera_Pivot' found. Please parent a transform gameobject to '{name}' game object.");
         }
 
-        /// <summary>
-        /// Speed multiplier while running.
-        /// </summary>
-        public float runSpeedMultiplier
-        {
-            get { return _runSpeedMultiplier; }
-            set { _runSpeedMultiplier = Mathf.Max(value, 1.0f); }
-        }
-
-        /// <summary>
-        /// Run input command.
-        /// </summary>
-        public bool run { get; set; }
-
-        #endregion
-
-        #region METHODS
-
-        /// <summary>
-        /// Use this method to animate camera.
-        /// The default implementation use this to animate camera's when crouching.
-        /// Called on LateUpdate.
-        /// </summary>
-        protected virtual void AnimateView()
-        {
-            // Scale camera pivot to simulate crouching
-            var yScale = isCrouching ? Mathf.Clamp01(crouchingHeight / standingHeight) : 1.0f;
-
-            cameraPivotTransform.localScale = Vector3.MoveTowards(cameraPivotTransform.localScale,
-                new Vector3(1.0f, yScale, 1.0f), 5.0f * Time.deltaTime);
-        }
-
-        /// <summary>
-        /// Perform 'Look' rotation.
-        /// This rotate the character along its y-axis (yaw) and a child camera along its local x-axis (pitch).
-        /// </summary>
-        protected virtual void RotateView()
-        {
-            mouseLook.LookRotation(movement, cameraTransform);
-        }
-
-        protected override void UpdateRotation()
-        {
-            RotateView();
-        }
-
-        /// <summary>
-        /// Get target speed, relative to input moveDirection,
-        /// eg: forward, backward or strafe.
-        /// </summary>
-        protected virtual float GetTargetSpeed()
-        {
-            // Defaults to forward speed
-
-            var targetSpeed = forwardSpeed;
-
-            // Strafe
-
-            if (moveDirection.x > 0.0f || moveDirection.x < 0.0f)
-                targetSpeed = strafeSpeed;
-
-            // Backwards
-
-            if (moveDirection.z < 0.0f)
-                targetSpeed = backwardSpeed;
-
-            // Forward handled last as if strafing and moving forward at the same time,
-            // forward speed should take precedence
-
-            if (moveDirection.z > 0.0f)
-                targetSpeed = forwardSpeed;
-
-            // Handle run speed modifier
-
-            return run ? targetSpeed * runSpeedMultiplier : targetSpeed;
-        }
-
-        /// <summary>
-        /// Overrides CalcDesiredVelocity to generate a velocity vector relative to view direction
-        /// eg: forward, backward or strafe.
-        /// </summary>
-        protected override Vector3 CalcDesiredVelocity()
-        {
-            if (GameManager.Instance.ViewPoint == PlayerViewPoint.TopDown || GameManager.Instance.ViewPoint == PlayerViewPoint.Isometric)
-            {
-                return base.CalcDesiredVelocity();
-            }
-            else
-            {
-                // Set character's target speed (eg: moving forward, backward or strafe)
-                speed = GetTargetSpeed();
-
-                // Return desired velocity relative to view direction and target speed
-                return transform.TransformDirection(base.CalcDesiredVelocity());
-            }
-        }
-
-        /// <summary>
-        /// Overrides 'BaseCharacterController' HandleInput method,
-        /// to perform custom input code. 
-        /// </summary>
-        protected override void HandleInput()
-        {
-            // Toggle pause / resume.
-            // By default, will restore character's velocity on resume (eg: restoreVelocityOnResume = true)
-            if (Input.GetKeyDown(KeyCode.P))
-                pause = !pause;
-
-            int forward = 0;
-            int right = 0;
-            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.Z))
-            {
-                forward++;
-            }
-            if (Input.GetKey(KeyCode.S))
-            {
-                forward--;
-            }
-            if (Input.GetKey(KeyCode.D))
-            {
-                right++;
-            }
-            if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.A))
-            {
-                right--;
-            }
-
-            if (GameManager.Instance.ViewPoint == PlayerViewPoint.SideView)
-            {
-                jump = (forward == 1) || Input.GetButton("Jump");
-                forward = (int)Mathf.Sign(Vector3.Dot(transform.forward, Vector3.right)) * right;
-                right = 0;
-            }
-            else
-            {
-                jump = Input.GetButton("Jump");
-            }
-
-            moveDirection = new Vector3
-            {
-                x = right,
-                y = 0.0f,
-                z = forward
-            };
-
-            run = Input.GetButton("Fire3");
-            crouch = Input.GetKey(KeyCode.C);
-
-        }
-
-        #endregion
-
-        #region MONOBEHAVIOUR
-
-        /// <summary>
-        /// Validate this editor exposed fields.
-        /// </summary>
-        public override void OnValidate()
-        {
-            // Call the parent class' version of method
-
-            base.OnValidate();
-
-            // Validate this editor exposed fields
-
-            forwardSpeed = _forwardSpeed;
-            backwardSpeed = _backwardSpeed;
-            strafeSpeed = _strafeSpeed;
-
-            runSpeedMultiplier = _runSpeedMultiplier;
-        }
-
-        /// <summary>
-        /// Initialize this.
-        /// </summary>
-
-        public override void Awake()
-        {
-            // Call the parent class' version of method
-            base.Awake();
-
-            // Cache and initialize this components
-            mouseLook = GetComponent<MouseLook>();
-            if (mouseLook == null)
-            {
-                Debug.LogError(
-                    string.Format(
-                        "BaseFPSController: No 'MouseLook' found. Please add a 'MouseLook' component to '{0}' game object",
-                        name));
-            }
-
-            cameraPivotTransform = transform.Find("Camera_Pivot");
-            if (cameraPivotTransform == null)
-            {
-                Debug.LogError(string.Format(
-                    "BaseFPSController: No 'Camera_Pivot' found. Please parent a transform gameobject to '{0}' game object.",
-                    name));
-            }
-
-            var cam = GetComponentInChildren<Camera>();
-            if (cam == null)
-            {
-                Debug.LogError(
-                    string.Format(
-                        "BaseFPSController: No 'Camera' found. Please parent a camera to '{0}' game object.", name));
-            }
-            else
-            {
-                cameraTransform = cam.transform;
-                mouseLook.Init(transform, cameraTransform);
-            }
-        }
-
-        public virtual void LateUpdate()
-        {
-            // Perform camera's (view) animation
-            AnimateView();
-        }
-
-        #endregion
+        Camera cam = GetComponentInChildren<Camera>();
+        CameraTransform = cam.transform;
+        MouseLook.Init(transform, CameraTransform);
     }
 }
