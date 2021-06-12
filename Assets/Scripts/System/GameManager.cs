@@ -12,18 +12,17 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private Camera fpsCamera;
     [SerializeField] private Camera worldCamera;
     [SerializeField] private Camera isoCamera;
-    [SerializeField] private Transform worldWeaponTransorm;
-
-
+    [SerializeField] private Transform worldWeaponTransform;
     [SerializeField] private Transform playerTransform;
 
     private Rigidbody playerRigidbody;
     private CharacterMovement playerMovement;
     private MultipleViewPlayerController playerController;
-    private AudioListener fpsAudioListener;
-    private AudioListener worldAudioListener;
 
     private int viewIndex = 0;
+    private bool isCurrentViewFPS;
+    public bool IsCurrentViewFPS { get => isCurrentViewFPS; }
+
     public PlayerViewPoint ViewPoint { get; private set; }
 
     private void Start()
@@ -34,15 +33,12 @@ public class GameManager : Singleton<GameManager>
 
         worldCamera.orthographicSize = 8f;
 
-        fpsAudioListener = fpsCamera.GetComponent<AudioListener>();
-        worldAudioListener = worldCamera.GetComponent<AudioListener>();
-
         SelectTopDown();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.Y))
         {
             //  ResetDefaultValues
             playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
@@ -66,20 +62,7 @@ public class GameManager : Singleton<GameManager>
                     break;
             }
         }
-    }
-
-    private void UpdateAudioSetup() // AUDIO
-    {
-        if (ViewPoint != PlayerViewPoint.FirstPerson)
-        {
-            worldAudioListener.enabled = true;
-            fpsAudioListener.enabled = false;
-        }
-        else
-        {
-            worldAudioListener.enabled = false;
-            fpsAudioListener.enabled = true;
-        }
+        isCurrentViewFPS = GameManager.Instance.ViewPoint == PlayerViewPoint.FirstPerson;
     }
 
     private void UpdateControlSettings()
@@ -128,7 +111,6 @@ public class GameManager : Singleton<GameManager>
         isoCamera.enabled = true;
 
         UpdateControlSettings();
-        UpdateAudioSetup();
     }
 
     public void SelectTopDown()
@@ -139,7 +121,7 @@ public class GameManager : Singleton<GameManager>
         Vector3 eulerAngles = fpsCamera.transform.rotation.eulerAngles;
         eulerAngles.x = 0f;
         fpsCamera.transform.rotation = Quaternion.Euler(eulerAngles);
-        worldWeaponTransorm.rotation = Quaternion.Euler(eulerAngles);
+        worldWeaponTransform.rotation = Quaternion.Euler(eulerAngles);
         worldCamera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
 
         fpsCamera.enabled = false;
@@ -147,7 +129,6 @@ public class GameManager : Singleton<GameManager>
         isoCamera.enabled = false;
 
         UpdateControlSettings();
-        UpdateAudioSetup();
     }
 
     public void SelectSideView()
@@ -165,7 +146,6 @@ public class GameManager : Singleton<GameManager>
         isoCamera.enabled = false;
 
         UpdateControlSettings();
-        UpdateAudioSetup();
     }
 
     public void SelectFPS()
@@ -177,6 +157,5 @@ public class GameManager : Singleton<GameManager>
         isoCamera.enabled = false;
 
         UpdateControlSettings();
-        UpdateAudioSetup();
     }
 }

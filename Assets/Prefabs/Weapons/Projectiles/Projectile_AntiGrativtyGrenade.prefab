@@ -72,9 +72,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifeDuration: 2
   damage: 0
-  throwForce: 10
-  explosionRadius: 7
-  pullPower: 500
+  hitVFX: {fileID: 0}
+  throwForce: 12
+  explosionRadius: 8
+  pullPower: 550
   explosionVFX: {fileID: 5113691823862550168, guid: 83e27dcafc682bc40a29fdc7cc1b3696,
     type: 3}
 --- !u!1 &7987521382037990341

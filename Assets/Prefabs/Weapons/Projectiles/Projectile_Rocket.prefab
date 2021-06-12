@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 294437330299a3647bf7ba57a58c6cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeDuration: 10
+  lifeDuration: 9
   damage: 100
   hitVFX: {fileID: 7924910502674083684, guid: 6d0fecf3475884c4db94adfc10f1b509, type: 3}
   moveForce: 70

@@ -1,35 +1,18 @@
 using UnityEngine;
-using UnityEngine.Assertions;
 
 public class PlayerWeaponController : MonoBehaviour
 {
-    [SerializeField] private Weapon[] worldWeaponList;
-    [SerializeField] private Weapon[] fpsWeaponList;
+    [SerializeField] private Weapon[] weapons;
+    [SerializeField] private float switchWeaponCooldown = 0.2f;
 
-    private int currentWeaponIndex = 0;
+    private float weaponSwitchTimer = 0f;
+    private int currentWeaponIndex;
     private bool isCurrentViewFPS;
-    private Weapon currentWeapon
-    {
-        get
-        {
-            if (isCurrentViewFPS)
-                return fpsWeaponList[currentWeaponIndex];
-            else
-                return worldWeaponList[currentWeaponIndex];
-        }
-    }
 
     private void Start()
     {
-        Assert.AreEqual(fpsWeaponList.Length, worldWeaponList.Length);
-
-        for (int i = 0; i < fpsWeaponList.Length; i++)
-        {
-            fpsWeaponList[i].gameObject.SetActive(false);
-            worldWeaponList[i].gameObject.SetActive(false);
-        }
         isCurrentViewFPS = GameManager.Instance.ViewPoint == PlayerViewPoint.FirstPerson;
-        SwitchNextWeapon();
+        EquipWeapon(0);
     }
 
     private void Update()
@@ -37,29 +20,62 @@ public class PlayerWeaponController : MonoBehaviour
         bool wasViewFPS = isCurrentViewFPS;
         isCurrentViewFPS = GameManager.Instance.ViewPoint == PlayerViewPoint.FirstPerson;
         if (isCurrentViewFPS != wasViewFPS)
-            UpdateActiveWeaponView();
-
-        if (Input.GetKeyDown(KeyCode.T))
         {
-            SwitchNextWeapon();
+            weapons[currentWeaponIndex].UpdateModelView(isCurrentViewFPS);
+        }
+
+        weaponSwitchTimer += Time.deltaTime;
+        weapons[currentWeaponIndex].ReloadTick();
+        HandleWeaponInputs();
+    }
+
+    private void HandleWeaponInputs()
+    {
+        if (Input.mouseScrollDelta.y != 0)
+        {
+            SwitchNextWeapon(Input.mouseScrollDelta.y > 0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.R))
+        {
+            EquipWeapon(0);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.T))
+        {
+            EquipWeapon(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.F))
+        {
+            EquipWeapon(2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.G))
+        {
+            EquipWeapon(3);
         }
 
         if (Input.GetMouseButton(0))
         {
-            currentWeapon.Fire();
+            weapons[currentWeaponIndex].Fire();
         }
     }
 
-    private void SwitchNextWeapon()
+    private void SwitchNextWeapon(bool ascendingOrder)
     {
-        currentWeapon.gameObject.SetActive(false);
-        currentWeaponIndex = (currentWeaponIndex + 1) % worldWeaponList.Length;
-        UpdateActiveWeaponView();
+        int weaponIndexDelta = ascendingOrder ? 1 : -1;
+        int nextWeaponIndex = (currentWeaponIndex + weaponIndexDelta + weapons.Length) % weapons.Length;
+        EquipWeapon(nextWeaponIndex);
     }
 
-    private void UpdateActiveWeaponView()
+    private void EquipWeapon(int weaponToEquipIndex)
     {
-        fpsWeaponList[currentWeaponIndex].gameObject.SetActive(isCurrentViewFPS);
-        worldWeaponList[currentWeaponIndex].gameObject.SetActive(!isCurrentViewFPS);
+        if (weaponSwitchTimer < switchWeaponCooldown)
+        {
+            return;
+        }
+
+        weaponSwitchTimer = 0f;
+        weapons[currentWeaponIndex].Equip(false);
+        currentWeaponIndex = weaponToEquipIndex;
+        weapons[weaponToEquipIndex].Equip(true);
     }
 }
