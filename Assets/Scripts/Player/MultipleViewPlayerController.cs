@@ -2,10 +2,12 @@
 
 public class MultipleViewPlayerController : BaseCharacterController
 {
-    [SerializeField] private float forwardSpeed = 5.0f;
-    [SerializeField] private float backwardSpeed = 3.0f;
-    [SerializeField] private float strafeSpeed = 4.0f;
     public float runSpeedMultiplier = 2.0f;
+
+    [Header("FPS speeds")]
+    [SerializeField] private float forwardSpeed = 6.0f;
+    [SerializeField] private float backwardSpeed = 4.0f;
+    [SerializeField] private float strafeSpeed = 5.0f;
 
     public Transform CameraPivotTransform { get; private set; }
     public Transform CameraTransform { get; private set; }
@@ -114,6 +116,7 @@ public class MultipleViewPlayerController : BaseCharacterController
 
         Run = Input.GetButton("Fire3");
     }
+
     public override void Awake()
     {
         base.Awake();

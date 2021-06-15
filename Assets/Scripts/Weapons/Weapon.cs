@@ -10,7 +10,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] private GameObject fpsModel;
     [SerializeField] private GameObject worldModel;
 
-    private float reloadTimer = Mathf.Infinity;
+    private float reloadTimer = Mathf.NegativeInfinity;
     private Animation animationReader;
     private Animation fpsAnim;
     private Animation worldAnim;

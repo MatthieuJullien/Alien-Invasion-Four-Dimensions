@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseJumpHeight: 1.6
   extraJumpPower: 25
-  speed: 12
+  speed: 13
   runSpeedMultiplier: 3
+  airControl: 0.3

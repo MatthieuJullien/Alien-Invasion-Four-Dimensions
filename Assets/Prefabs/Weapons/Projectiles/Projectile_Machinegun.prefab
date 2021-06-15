@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeDuration: 5
-  damage: 18
+  damage: 8
   hitVFX: {fileID: 5015858116816369279, guid: d92791617ea029c4ebd2b8334f9909da, type: 3}
   moveForce: 80
 --- !u!54 &6608761942373633343
