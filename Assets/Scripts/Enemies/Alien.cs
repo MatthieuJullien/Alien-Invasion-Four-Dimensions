@@ -12,9 +12,12 @@ public class Alien : MonoBehaviour
     }
 
     [SerializeField] private float deathDuration = 0f;
-    [SerializeField] private GameObject deathVFX;
     [SerializeField] private Alien alienPrefab;
     [SerializeField] private float maxSight = 30f;
+
+    [Header("VFX")]
+    [SerializeField] private ParticleSystem hitVFX;
+    [SerializeField] private GameObject deathVFX;
 
     [Header("Render")]
     [SerializeField] private Renderer alienRenderer;
@@ -35,10 +38,13 @@ public class Alien : MonoBehaviour
     [SerializeField] private float targetChangeInterval = 2f;
     [SerializeField] private float targetChangeDistance = 6f;
 
-    private static readonly int DieAnim = Animator.StringToHash("Die");
-    private static readonly int IdleAnim = Animator.StringToHash("Eat_Cycle_1");
-    private static readonly int MoveAnim = Animator.StringToHash("Walk_Cycle_2");
-    private static readonly int AttackAnim = Animator.StringToHash("Attack_4");
+    // TODO randomize animations?
+    const string MOVE_ANIM = "alien_move";
+    const string IDLE_ANIM = "alien_idle";
+    const string DIE_ANIM = "alien_die";
+    const string ATTACK_ANIM = "alien_attack";
+    const string HURT_ANIM = "alien_hurt";
+
 
     private int alienLayerMask;
 
@@ -59,7 +65,19 @@ public class Alien : MonoBehaviour
     private float _lastTargetChange = Mathf.NegativeInfinity;
     private float _nbMaxColliderToSpawn;
     private bool _isIdle = false;
-    private float _pursuitPredictionStrenght;
+    private float _pursuitPredictionStrength;
+    private string _currentAnim;
+    private string _previousAnim;
+
+    private void ChangeAnimation(string anim)
+    {
+        if (_currentAnim == anim) return;
+
+        _animator.Play(anim);
+        CancelInvoke(nameof(BackToPreviousAnim));
+        _previousAnim = _currentAnim;
+        _currentAnim = anim;
+    }
 
     public bool IsDead
     {
@@ -81,6 +99,7 @@ public class Alien : MonoBehaviour
         _playerTransform = _playerGameObject.transform;
         _playerHealth = _playerGameObject.GetComponent<Health>();
         _playerMovement = _playerGameObject.GetComponent<MultipleViewPlayerController>();
+
     }
 
     private void Start()
@@ -89,7 +108,7 @@ public class Alien : MonoBehaviour
         _targetPosition = transform.position;
         alienRenderer.material = respawnMaterial;
         _nbMaxColliderToSpawn = _thisColliders.Length;
-        _pursuitPredictionStrenght = Random.value;
+        _pursuitPredictionStrength = Random.value * 2f - 0.5f;
     }
 
     private void Update()
@@ -153,14 +172,14 @@ public class Alien : MonoBehaviour
     private void StartPatrol()
     {
         _state = AlienState.Patrol;
-        _animator.SetTrigger(MoveAnim);
+        ChangeAnimation(MOVE_ANIM);
         _navMeshAgent.destination = ChooseRandomTarget(); ;
     }
 
     private void StartPursuit()
     {
         _state = AlienState.Pursuit;
-        _animator.SetTrigger(MoveAnim);
+        ChangeAnimation(MOVE_ANIM);
         _navMeshAgent.destination = _playerTransform.position;
     }
 
@@ -183,12 +202,12 @@ public class Alien : MonoBehaviour
 
         if (_navMeshAgent.velocity.magnitude < 1f && !_isIdle)
         {
-            _animator.SetTrigger(IdleAnim);
+            ChangeAnimation(IDLE_ANIM);
             _isIdle = true;
         }
         else if (_navMeshAgent.velocity.magnitude >= 1f && _isIdle)
         {
-            _animator.SetTrigger(MoveAnim);
+            ChangeAnimation(MOVE_ANIM);
             _isIdle = false;
         }
 
@@ -218,19 +237,11 @@ public class Alien : MonoBehaviour
         }
         else
         {
-
-            //
-            // T = distancetoplayer / playerMaxsSpeed
-            // newDestination  = playerPosition + playerVelocity * T
-            //
-            // seek = newdestination - currentDestination
-            //
-            //
             // Attempt to implement pursuit steering behavior:
             float T = DistanceToPlayer / _playerMovement.speed;
-            Vector3 newDestination = _playerTransform.position + _playerMovement.movement.velocity * T * _pursuitPredictionStrenght;
+            Vector3 newDestination = _playerTransform.position + _playerMovement.movement.velocity * T * _pursuitPredictionStrength;
             _navMeshAgent.destination = newDestination - _navMeshAgent.desiredVelocity;
-            RotateTowardDestination();
+            RotateToward(_navMeshAgent.destination);
         }
     }
 
@@ -247,7 +258,7 @@ public class Alien : MonoBehaviour
             StartPursuit();
             return;
         }
-
+        RotateToward(_playerTransform.position);
         Attack();
     }
 
@@ -264,9 +275,9 @@ public class Alien : MonoBehaviour
         _duplicationCount++;
     }
 
-    private void RotateTowardDestination()
+    private void RotateToward(Vector3 lookTarget)
     {
-        Vector3 direction = (_navMeshAgent.destination - transform.position).normalized;
+        Vector3 direction = (lookTarget - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * turnSpeed);
     }
@@ -274,10 +285,13 @@ public class Alien : MonoBehaviour
     private void Attack()
     {
         if (Time.time < _lastAttackTime + attackCooldown) return;
-
-        _animator.SetTrigger(AttackAnim);
-
         _lastAttackTime = Time.time;
+        ChangeAnimation(ATTACK_ANIM);
+    }
+
+    // Call by Attack Animation
+    public void Hit()
+    {
         _playerHealth.TakeDamage(attackDamage);
     }
 
@@ -285,7 +299,7 @@ public class Alien : MonoBehaviour
     public void Die()
     {
         _state = AlienState.Dead;
-        _animator.SetTrigger(DieAnim);
+        ChangeAnimation(DIE_ANIM);
 
         foreach (var collider in _thisColliders)
         {
@@ -306,5 +320,19 @@ public class Alien : MonoBehaviour
         Gizmos.DrawLine(transform.position, _navMeshAgent.destination);
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(_navMeshAgent.destination, 1f);
+    }
+
+    public void OnTakeDamage()
+    {
+        hitVFX.Play();
+        if (_currentAnim != IDLE_ANIM && _currentAnim != MOVE_ANIM) return;
+
+        ChangeAnimation(HURT_ANIM);
+        Invoke(nameof(BackToPreviousAnim), _animator.GetCurrentAnimatorStateInfo(0).length);
+    }
+
+    private void BackToPreviousAnim()
+    {
+        ChangeAnimation(_previousAnim);
     }
 }
