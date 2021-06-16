@@ -32,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 265712960114456603}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.61, y: 0.19205618, z: -57.61}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children:
   - {fileID: 268491768823384045}
   - {fileID: 268024869500139249}
@@ -96,7 +96,7 @@ MonoBehaviour:
   duplicationInterval: 3
   maxDuplication: 3
   attackCooldown: 1
-  attackDamage: 20
+  attackDamage: 35
   turnSpeed: 2
   targetChangeInterval: 3
   targetChangeDistance: 25
@@ -152,7 +152,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1
-  m_Speed: 2
+  m_Speed: 3
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 60

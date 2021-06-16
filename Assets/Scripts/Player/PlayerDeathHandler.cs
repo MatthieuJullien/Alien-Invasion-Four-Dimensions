@@ -10,5 +10,6 @@ public class PlayerDeathHandler : MonoBehaviour
         //_animator.SetTrigger(DieAnim);
         Instantiate(deathVFX, transform.position, Quaternion.identity);
         GetComponent<MultipleViewPlayerController>().pause = true;
+        Debug.Log("GAMEOVER !!!");
     }
 }

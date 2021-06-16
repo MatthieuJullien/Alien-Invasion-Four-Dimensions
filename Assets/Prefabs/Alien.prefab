@@ -3272,7 +3272,7 @@ Transform:
   m_GameObject: {fileID: 6065870725055008153}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.61, y: 0.19205618, z: -57.61}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 6063976063147127407}
   - {fileID: 6063669172561773427}
@@ -3328,7 +3328,7 @@ MonoBehaviour:
   deathVFX: {fileID: 8471834160227126305, guid: 8c7e3f0eb5bf61d49a95964f848510f4,
     type: 3}
   alienPrefab: {fileID: -1992341606676738582}
-  maxSight: 10
+  maxSight: 20
   alienRenderer: {fileID: 6183215244425400997}
   respawnMaterial: {fileID: 2100000, guid: 55c876341be80d54292722a134e45dcb, type: 2}
   activeMaterial: {fileID: 2100000, guid: e061968e56112fe4ca8c0ad3347c2a0d, type: 2}
@@ -3337,8 +3337,8 @@ MonoBehaviour:
   attackCooldown: 1
   attackDamage: 20
   turnSpeed: 1
-  targetChangeInterval: 3
-  targetChangeDistance: 15
+  targetChangeInterval: 2
+  targetChangeDistance: 20
 --- !u!54 &1794941954
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3391,7 +3391,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1
-  m_Speed: 2.5
+  m_Speed: 3.4
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 70

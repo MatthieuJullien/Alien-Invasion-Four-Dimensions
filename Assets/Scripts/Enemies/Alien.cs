@@ -36,6 +36,7 @@ public class Alien : MonoBehaviour
     [SerializeField] private float targetChangeDistance = 6f;
 
     private static readonly int DieAnim = Animator.StringToHash("Die");
+    private static readonly int IdleAnim = Animator.StringToHash("Eat_Cycle_1");
     private static readonly int MoveAnim = Animator.StringToHash("Walk_Cycle_2");
     private static readonly int AttackAnim = Animator.StringToHash("Attack_4");
 
@@ -44,6 +45,7 @@ public class Alien : MonoBehaviour
     private GameObject _playerGameObject;
     private Transform _playerTransform;
     private Health _playerHealth;
+    private MultipleViewPlayerController _playerMovement;
     private Vector3 _targetPosition;
     private Health _health;
     private Animator _animator;
@@ -55,6 +57,9 @@ public class Alien : MonoBehaviour
     private int _duplicationCount = 0;
     private float _lastAttackTime = Mathf.NegativeInfinity;
     private float _lastTargetChange = Mathf.NegativeInfinity;
+    private float _nbMaxColliderToSpawn;
+    private bool _isIdle = false;
+    private float _pursuitPredictionStrenght;
 
     public bool IsDead
     {
@@ -75,6 +80,7 @@ public class Alien : MonoBehaviour
         _playerGameObject = GameObject.FindWithTag("Player");
         _playerTransform = _playerGameObject.transform;
         _playerHealth = _playerGameObject.GetComponent<Health>();
+        _playerMovement = _playerGameObject.GetComponent<MultipleViewPlayerController>();
     }
 
     private void Start()
@@ -82,6 +88,8 @@ public class Alien : MonoBehaviour
         _duplicationTimer = duplicationInterval;
         _targetPosition = transform.position;
         alienRenderer.material = respawnMaterial;
+        _nbMaxColliderToSpawn = _thisColliders.Length;
+        _pursuitPredictionStrenght = Random.value;
     }
 
     private void Update()
@@ -116,12 +124,8 @@ public class Alien : MonoBehaviour
 
     private void UpdateRespawn()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, 2f, alienLayerMask);
-        if (colliders.Length > 2)
-        {
-
-        }
-        else
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 1f, alienLayerMask);
+        if (colliders.Length <= Mathf.FloorToInt(_nbMaxColliderToSpawn))
         {
             foreach (var collider in _thisColliders)
             {
@@ -130,11 +134,18 @@ public class Alien : MonoBehaviour
             alienRenderer.material = activeMaterial;
             StartPatrol();
         }
+        else
+        {
+            _nbMaxColliderToSpawn += 0.3f * Time.deltaTime;
+        }
     }
 
     private Vector3 ChooseRandomTarget()
     {
         Vector3 randomDirection = Random.insideUnitSphere * targetChangeDistance;
+        if (Vector3.Angle(transform.forward, randomDirection) > 90)
+            return ChooseRandomTarget();
+
         randomDirection += transform.position;
         return randomDirection;
     }
@@ -163,11 +174,22 @@ public class Alien : MonoBehaviour
         Vector3 playerDirection = _playerTransform.position - transform.position;
         if (Physics.Raycast(transform.position, playerDirection, out RaycastHit hit, maxSight))
         {
-            if (hit.collider.gameObject.layer == PLAYER_LAYER)
+            if (!_playerHealth.IsDead && hit.collider.gameObject.layer == PLAYER_LAYER)
             {
                 StartPursuit();
                 return;
             }
+        }
+
+        if (_navMeshAgent.velocity.magnitude < 1f && !_isIdle)
+        {
+            _animator.SetTrigger(IdleAnim);
+            _isIdle = true;
+        }
+        else if (_navMeshAgent.velocity.magnitude >= 1f && _isIdle)
+        {
+            _animator.SetTrigger(MoveAnim);
+            _isIdle = false;
         }
 
         if (Time.time >= _lastTargetChange + targetChangeInterval)
@@ -180,6 +202,12 @@ public class Alien : MonoBehaviour
 
     private void UpdatePursuit()
     {
+        if (_playerHealth.IsDead)
+        {
+            StartPatrol();
+            return;
+        }
+
         if (DistanceToPlayer > maxSight)
         {
             StartPatrol();
@@ -190,17 +218,36 @@ public class Alien : MonoBehaviour
         }
         else
         {
-            _navMeshAgent.destination = _playerTransform.position;
+
+            //
+            // T = distancetoplayer / playerMaxsSpeed
+            // newDestination  = playerPosition + playerVelocity * T
+            //
+            // seek = newdestination - currentDestination
+            //
+            //
+            // Attempt to implement pursuit steering behavior:
+            float T = DistanceToPlayer / _playerMovement.speed;
+            Vector3 newDestination = _playerTransform.position + _playerMovement.movement.velocity * T * _pursuitPredictionStrenght;
+            _navMeshAgent.destination = newDestination - _navMeshAgent.desiredVelocity;
             RotateTowardDestination();
         }
     }
 
     private void UpdateAttack()
     {
+        if (_playerHealth.IsDead)
+        {
+            StartPatrol();
+            return;
+        }
+
         if (DistanceToPlayer > _navMeshAgent.stoppingDistance)
         {
             StartPursuit();
+            return;
         }
+
         Attack();
     }
 
@@ -239,6 +286,11 @@ public class Alien : MonoBehaviour
     {
         _state = AlienState.Dead;
         _animator.SetTrigger(DieAnim);
+
+        foreach (var collider in _thisColliders)
+        {
+            collider.enabled = false;
+        }
         Instantiate(deathVFX, transform.position, Quaternion.identity);
         Destroy(gameObject, deathDuration);
         _navMeshAgent.enabled = false;
