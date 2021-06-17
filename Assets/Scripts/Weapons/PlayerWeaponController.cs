@@ -9,9 +9,10 @@ public class PlayerWeaponController : MonoBehaviour
     private int currentWeaponIndex;
     private bool isCurrentViewFPS;
 
-    private void Start()
+    private void OnEnable()
     {
         isCurrentViewFPS = GameManager.Instance.ViewPoint == PlayerViewPoint.FirstPerson;
+        weaponSwitchTimer = Mathf.Infinity;
         EquipWeapon(0);
     }
 
@@ -66,7 +67,7 @@ public class PlayerWeaponController : MonoBehaviour
         EquipWeapon(nextWeaponIndex);
     }
 
-    private void EquipWeapon(int weaponToEquipIndex)
+    public void EquipWeapon(int weaponToEquipIndex)
     {
         if (weaponSwitchTimer < switchWeaponCooldown)
         {

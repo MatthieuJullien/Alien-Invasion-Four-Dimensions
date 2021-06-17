@@ -1059,6 +1059,9 @@ ModelImporter:
   - first:
       137: 13700024
     second: Rikayon_MeshPart9
+  - first:
+      74: -2137679092082941472
+    second: Armature|Attack_4
   externalObjects:
   - first:
       type: UnityEngine:Material
