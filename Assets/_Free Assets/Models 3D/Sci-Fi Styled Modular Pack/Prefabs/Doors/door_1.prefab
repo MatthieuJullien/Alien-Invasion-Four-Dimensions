@@ -360,7 +360,7 @@ GameObject:
   - component: {fileID: 1190830987}
   - component: {fileID: 1190830990}
   - component: {fileID: 1190830989}
-  - component: {fileID: 1190830988}
+  - component: {fileID: 1242796763}
   m_Layer: 0
   m_Name: TriggerZone
   m_TagString: Untagged
@@ -401,9 +401,9 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.1550446, y: 4.3407755, z: 1}
-  m_Center: {x: -0.07752383, y: 1.6703877, z: 3.6894045e-15}
---- !u!114 &1190830988
+  m_Size: {x: 3.1550446, y: 4.3407755, z: 3.141425}
+  m_Center: {x: -0.07752383, y: 1.6703877, z: -0.007286966}
+--- !u!114 &1242796763
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -412,7 +412,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1190830986}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0405389076908b34c9150a4ceab0507c, type: 3}
+  m_Script: {fileID: 11500000, guid: f5585820267331f449b1da7b3b630bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   triggerLayers:
@@ -448,3 +448,4 @@ MonoBehaviour:
           m_StringArgument: character_nearby
           m_BoolArgument: 0
         m_CallState: 2
+  unlockingObjective: 0

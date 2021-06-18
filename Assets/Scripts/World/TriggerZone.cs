@@ -9,7 +9,7 @@ public class TriggerZone : MonoBehaviour
     [SerializeField] protected UnityEvent exitAction;
     //[SerializeField] private UnityEvent stayAction;
 
-    protected void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         if (enterAction == null)
             return;
@@ -21,7 +21,7 @@ public class TriggerZone : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    protected virtual void OnTriggerExit(Collider other)
     {
         if (exitAction == null)
             return;
