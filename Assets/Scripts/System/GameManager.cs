@@ -15,25 +15,24 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField] private Transform playerTransform;
 
+    private static AudioManager audioMan;
+
     private Rigidbody playerRigidbody;
     private CharacterMovement playerMovement;
     private MultipleViewPlayerController playerController;
-    private FMODUnity.StudioListener fpsAudioListener;
-    private FMODUnity.StudioListener worldAudioListener;
 
     private int viewIndex = 0;
     public PlayerViewPoint ViewPoint { get; private set; }
 
     private void Start()
     {
+        audioMan = AudioManager.Instance;
+
         playerRigidbody = playerTransform.gameObject.GetComponent<Rigidbody>();
         playerMovement = playerTransform.gameObject.GetComponent<CharacterMovement>();
         playerController = playerTransform.gameObject.GetComponent<MultipleViewPlayerController>();
 
         worldCamera.orthographicSize = 8f;
-
-        fpsAudioListener = fpsCamera.GetComponent<FMODUnity.StudioListener>();
-        worldAudioListener = worldCamera.GetComponent<FMODUnity.StudioListener>();
 
         SelectTopDown();
     }
@@ -63,20 +62,6 @@ public class GameManager : Singleton<GameManager>
                 default:
                     break;
             }
-        }
-    }
-
-    private void UpdateAudioSetup() // AUDIO
-    {
-        if (ViewPoint != PlayerViewPoint.FirstPerson)
-        {
-            worldAudioListener.enabled = true;
-            fpsAudioListener.enabled = false;
-        }
-        else
-        {
-            worldAudioListener.enabled = false;
-            fpsAudioListener.enabled = true;
         }
     }
 
@@ -126,7 +111,7 @@ public class GameManager : Singleton<GameManager>
         isoCamera.enabled = true;
 
         UpdateControlSettings();
-        UpdateAudioSetup();
+        audioMan.SetListenerCamera(isoCamera);
     }
 
     public void SelectTopDown()
@@ -145,7 +130,7 @@ public class GameManager : Singleton<GameManager>
         isoCamera.enabled = false;
 
         UpdateControlSettings();
-        UpdateAudioSetup();
+        audioMan.SetListenerCamera(worldCamera);
     }
 
     public void SelectSideView()
@@ -163,7 +148,7 @@ public class GameManager : Singleton<GameManager>
         isoCamera.enabled = false;
 
         UpdateControlSettings();
-        UpdateAudioSetup();
+        audioMan.SetListenerCamera(worldCamera);
     }
 
     public void SelectFPS()
@@ -175,6 +160,6 @@ public class GameManager : Singleton<GameManager>
         isoCamera.enabled = false;
 
         UpdateControlSettings();
-        UpdateAudioSetup();
+        audioMan.SetListenerCamera(fpsCamera);
     }
 }

@@ -9,9 +9,6 @@ public class PlayerWeaponController : MonoBehaviour
     private int currentWeaponIndex = 0;
     private bool isCurrentViewFPS;
 
-    private static AudioManager audioMan;
-    private FMOD.Studio.EventInstance weapons;
-
     private Weapon currentWeapon
     {
         get
@@ -26,9 +23,6 @@ public class PlayerWeaponController : MonoBehaviour
     private void Start()
     {
 
-        audioMan = AudioManager.Instance;
-        weapons = audioMan.PlayerWeapons;
-
         Assert.AreEqual(fpsWeaponList.Length, worldWeaponList.Length);
 
         for (int i = 0; i < fpsWeaponList.Length; i++)
@@ -38,8 +32,6 @@ public class PlayerWeaponController : MonoBehaviour
         }
         isCurrentViewFPS = GameManager.Instance.ViewPoint == PlayerViewPoint.FirstPerson;
         SwitchNextWeapon();
-
-        FMODUnity.RuntimeManager.AttachInstanceToGameObject(weapons, GetComponent<Transform>(), GetComponent<Rigidbody>());
     }
 
     private void Update()

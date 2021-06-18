@@ -9,6 +9,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float reloadDuration;
 
 
+    private GameObject player;
     private static AudioManager audioMan;
     private FMOD.Studio.EventInstance weapons;
     private FMOD.Studio.PARAMETER_ID wSwitch;
@@ -24,6 +25,7 @@ public class Weapon : MonoBehaviour
 
     private void Start()
     {
+        player = GameObject.Find("Player");
         audioMan = AudioManager.Instance;
         weapons = audioMan.PlayerWeapons;
         wSwitch = audioMan.WeaponSwitch;
@@ -40,6 +42,8 @@ public class Weapon : MonoBehaviour
         if (!isLoaded)
             return;
 
+        //Update 3d sound position
+        FMODUnity.RuntimeManager.AttachInstanceToGameObject(weapons, player.GetComponent<Transform>(), player.GetComponent<Rigidbody>());
         //setting switch to current weapon
         audioMan.SetLabeledParameter(weapons, wSwitch, index);
         //playing sound
