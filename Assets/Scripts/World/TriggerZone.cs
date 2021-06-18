@@ -4,12 +4,12 @@ using UnityEngine.Events;
 [RequireComponent(typeof(BoxCollider))]
 public class TriggerZone : MonoBehaviour
 {
-    [SerializeField] private LayerMask triggerLayers;
-    [SerializeField] private UnityEvent enterAction;
-    [SerializeField] private UnityEvent exitAction;
+    [SerializeField] protected LayerMask triggerLayers;
+    [SerializeField] protected UnityEvent enterAction;
+    [SerializeField] protected UnityEvent exitAction;
     //[SerializeField] private UnityEvent stayAction;
 
-    private void OnTriggerEnter(Collider other)
+    protected void OnTriggerEnter(Collider other)
     {
         if (enterAction == null)
             return;

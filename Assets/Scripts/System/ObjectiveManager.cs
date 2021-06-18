@@ -1,5 +1,9 @@
 using UnityEngine;
-using UnityEngine.UI;
+
+public enum ObjectiveEnum
+{
+    GetAccessCodes, GetWeapons, OpenPortal, SurchargeReactor, EscapeStation
+}
 
 public class ObjectiveManager : Singleton<ObjectiveManager>
 {
@@ -12,7 +16,13 @@ public class ObjectiveManager : Singleton<ObjectiveManager>
         objectives[0].Unlock();
     }
 
-    public void UnlockNextObjective()
+    public void CompleteObjective(ObjectiveEnum objectiveToComplete)
+    {
+        if (objectiveToComplete != objectives[_currentObjectiveIndex].Label) return;
+        UnlockNextObjective();
+    }
+
+    private void UnlockNextObjective()
     {
         objectives[_currentObjectiveIndex].Complete();
         _currentObjectiveIndex++;

@@ -1,2 +1,4 @@
 ﻿// TODO
 - Alien accurate collision (close to Skinned Mesh and follow movement)
+- Hero model + animations => Ameliorer systeme animation des aliens ?
+- health bar
