@@ -7,6 +7,7 @@ public enum PlayerViewPoint
 
 public class GameManager : Singleton<GameManager>
 {
+    [SerializeField] private PlayerViewPoint startingViewPoint;
     [SerializeField] private Camera fpsCamera;
     [SerializeField] private Camera worldCamera;
     [SerializeField] private Camera isoCamera;
@@ -19,16 +20,15 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private MovementConfig fpsMvtCfg;
     [SerializeField] private MovementConfig isoMvtCfg;
 
-    // AUDIO
-    private static AudioManager audioMan;
-    //
+    private AudioManager audioMan;
 
     private Rigidbody playerRigidbody;
     private CharacterMovement playerMovement;
     private MultipleViewPlayerController playerController;
 
-    private int viewIndex = 0;
+    private MovementConfig currentMvtCongif;
     private bool isCurrentViewFPS;
+
     public bool IsCurrentViewFPS { get => isCurrentViewFPS; }
 
     public PlayerViewPoint ViewPoint { get; private set; }
@@ -42,34 +42,51 @@ public class GameManager : Singleton<GameManager>
         playerController = playerTransform.gameObject.GetComponent<MultipleViewPlayerController>();
 
         worldCamera.orthographicSize = 8f;
-
-        SelectTopDown();
+        SelectViewPoint(startingViewPoint);
     }
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(1))
         {
-            viewIndex = (viewIndex + 1) % 4;
-            switch (viewIndex)
-            {
-                case 0:
-                    SelectTopDown();
-                    break;
-                case 1:
-                    SelectSideView();
-                    break;
-                case 2:
-                    SelectFPS();
-                    break;
-                case 3:
-                    SelectIso();
-                    break;
-                default:
-                    break;
-            }
+            ChangeToNextViewPoint();
         }
         isCurrentViewFPS = GameManager.Instance.ViewPoint == PlayerViewPoint.FirstPerson;
+    }
+
+
+    private void ChangeToNextViewPoint()
+    {
+        PlayerViewPoint nextViewPoint = ViewPoint switch
+        {
+            PlayerViewPoint.TopDown => PlayerViewPoint.SideView,
+            PlayerViewPoint.SideView => PlayerViewPoint.FirstPerson,
+            PlayerViewPoint.FirstPerson => PlayerViewPoint.Isometric,
+            PlayerViewPoint.Isometric => PlayerViewPoint.SideView
+        };
+        SelectViewPoint(nextViewPoint);
+    }
+
+    private void SelectViewPoint(PlayerViewPoint viewPoint)
+    {
+        switch (viewPoint)
+        {
+            case PlayerViewPoint.TopDown:
+                SelectTopDown();
+                break;
+            case PlayerViewPoint.SideView:
+                SelectSideView();
+                break;
+            case PlayerViewPoint.FirstPerson:
+                SelectFPS();
+                break;
+            case PlayerViewPoint.Isometric:
+                SelectIso();
+                break;
+            default:
+                break;
+        }
+        UpdateControlSettings();
     }
 
     private void UpdateControlSettings()
@@ -77,36 +94,25 @@ public class GameManager : Singleton<GameManager>
         switch (ViewPoint)
         {
             case PlayerViewPoint.Isometric:
-                playerController.baseJumpHeight = isoMvtCfg.baseJumpHeight;
-                playerController.extraJumpPower = isoMvtCfg.extraJumpPower;
-                playerController.speed = isoMvtCfg.speed;
-                playerController.runSpeedMultiplier = isoMvtCfg.runSpeedMultiplier;
-                playerController.airControl = isoMvtCfg.airControl;
+                currentMvtCongif = isoMvtCfg;
                 break;
             case PlayerViewPoint.TopDown:
-                playerController.baseJumpHeight = topConfig.baseJumpHeight;
-                playerController.extraJumpPower = topConfig.extraJumpPower;
-                playerController.speed = topConfig.speed;
-                playerController.runSpeedMultiplier = topConfig.runSpeedMultiplier;
-                playerController.airControl = topConfig.airControl;
+                currentMvtCongif = topConfig;
                 break;
             case PlayerViewPoint.SideView:
-                playerController.baseJumpHeight = sideConfig.baseJumpHeight;
-                playerController.extraJumpPower = sideConfig.extraJumpPower;
-                playerController.speed = sideConfig.speed;
-                playerController.runSpeedMultiplier = sideConfig.runSpeedMultiplier;
-                playerController.airControl = sideConfig.airControl;
+                currentMvtCongif = sideConfig;
                 break;
             case PlayerViewPoint.FirstPerson:
-                playerController.baseJumpHeight = fpsMvtCfg.baseJumpHeight;
-                playerController.extraJumpPower = fpsMvtCfg.extraJumpPower;
-                playerController.speed = fpsMvtCfg.speed;
-                playerController.runSpeedMultiplier = fpsMvtCfg.runSpeedMultiplier;
-                playerController.airControl = fpsMvtCfg.airControl;
+                currentMvtCongif = fpsMvtCfg;
                 break;
             default:
                 break;
         }
+        playerController.baseJumpHeight = currentMvtCongif.baseJumpHeight;
+        playerController.extraJumpPower = currentMvtCongif.extraJumpPower;
+        playerController.speed = currentMvtCongif.speed;
+        playerController.runSpeedMultiplier = currentMvtCongif.runSpeedMultiplier;
+        playerController.airControl = currentMvtCongif.airControl;
     }
 
     public void SelectIso()
@@ -120,8 +126,7 @@ public class GameManager : Singleton<GameManager>
         worldCamera.enabled = false;
         isoCamera.enabled = true;
 
-        UpdateControlSettings();
-        audioMan.SetListenerCamera(isoCamera);
+        audioMan.SetListenerCamera(IsCurrentViewFPS);
     }
 
     public void SelectTopDown()
@@ -140,8 +145,7 @@ public class GameManager : Singleton<GameManager>
         worldCamera.enabled = true;
         isoCamera.enabled = false;
 
-        UpdateControlSettings();
-        audioMan.SetListenerCamera(worldCamera);
+        audioMan.SetListenerCamera(IsCurrentViewFPS);
     }
 
     public void SelectSideView()
@@ -159,8 +163,7 @@ public class GameManager : Singleton<GameManager>
         worldCamera.enabled = true;
         isoCamera.enabled = false;
 
-        UpdateControlSettings();
-        audioMan.SetListenerCamera(worldCamera);
+        audioMan.SetListenerCamera(IsCurrentViewFPS);
     }
 
     public void SelectFPS()
@@ -172,7 +175,6 @@ public class GameManager : Singleton<GameManager>
         worldCamera.enabled = false;
         isoCamera.enabled = false;
 
-        UpdateControlSettings();
-        audioMan.SetListenerCamera(fpsCamera);
+        audioMan.SetListenerCamera(IsCurrentViewFPS);
     }
 }
