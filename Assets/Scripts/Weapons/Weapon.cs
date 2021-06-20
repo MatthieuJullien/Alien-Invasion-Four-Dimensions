@@ -15,8 +15,14 @@ public class Weapon : MonoBehaviour
     private Animation fpsAnim;
     private Animation worldAnim;
 
-    public bool IsLoaded { get; private set; }
+    // AUDIO
+    private GameObject player;
+    private static AudioManager audioMan;
+    private FMOD.Studio.EventInstance weapons;
+    private FMOD.Studio.PARAMETER_ID wSwitch;
+    //
 
+    public bool IsLoaded { get; private set; }
 
     private void Awake()
     {
@@ -35,6 +41,13 @@ public class Weapon : MonoBehaviour
         {
             Debug.Log($"The reload duration of {gameObject.name} must be longer than the shooting animation (anim = {animationReader.clip.length}).");
         }
+
+        // AUDIO
+        player = GameObject.Find("Player");
+        audioMan = AudioManager.Instance;
+        weapons = audioMan.PlayerWeapons_EventInstance;
+        wSwitch = audioMan.WeaponSwitch_ParamID;
+        //
     }
 
     private void Update()
@@ -73,6 +86,16 @@ public class Weapon : MonoBehaviour
     {
         if (!IsLoaded)
             return;
+
+        // AUDIO
+        int weaponIndex = 0; // a partir de playerweaponcontroller weapons[]
+        //Update 3d sound position
+        FMODUnity.RuntimeManager.AttachInstanceToGameObject(weapons, player.GetComponent<Transform>(), player.GetComponent<Rigidbody>());
+        //setting switch to current weapon
+        audioMan.SetLabeledParameter(weapons, wSwitch, weaponIndex);
+        //playing sound
+        audioMan.Play(weapons);
+        //
 
         Transform[] spawnPoints;
         if (GameManager.Instance.IsCurrentViewFPS)
