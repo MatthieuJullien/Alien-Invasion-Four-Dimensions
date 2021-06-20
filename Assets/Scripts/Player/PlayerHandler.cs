@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class PlayerHandler : MonoBehaviour
 {
-    [SerializeField] private float deathDuration = 0f;
     [SerializeField] private ParticleSystem hitVFX;
     [SerializeField] private GameObject deathVFX;
     [SerializeField] private Text healthBar;

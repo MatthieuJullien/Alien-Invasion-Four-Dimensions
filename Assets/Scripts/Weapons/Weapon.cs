@@ -45,8 +45,8 @@ public class Weapon : MonoBehaviour
         // AUDIO
         player = GameObject.Find("Player");
         audioMan = AudioManager.Instance;
-        weapons = audioMan.PlayerWeapons_EventInstance;
-        wSwitch = audioMan.WeaponSwitch_ParamID;
+        weapons = audioMan.PlayerWeapons;
+        wSwitch = audioMan.WeaponSwitch;
         //
     }
 
