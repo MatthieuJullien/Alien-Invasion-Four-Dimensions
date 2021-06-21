@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 795198528}
   - component: {fileID: 795198529}
   m_Layer: 0
-  m_Name: Spot Light
+  m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 795198527}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.82, z: 0.22}
+  m_LocalPosition: {x: 0, y: 3.64, z: 0.22}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8492861223781529220}
@@ -40,7 +40,7 @@ Light:
   m_GameObject: {fileID: 795198527}
   m_Enabled: 1
   serializedVersion: 10
-  m_Type: 0
+  m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_Intensity: 2
@@ -271,12 +271,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5585820267331f449b1da7b3b630bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spotlight: {fileID: 795198529}
-  openedLightIntensity: 1.5
-  closedLightIntensity: 6.55
+  doorlight: {fileID: 795198529}
+  openedLightIntensity: 5
+  closedLightIntensity: 5
   deniedColor: {r: 1, g: 0, b: 0, a: 0}
   openedColor: {r: 0, g: 1, b: 0.2975583, a: 0}
-  closedColor: {r: 0.19673413, g: 0.117871106, b: 0.8113208, a: 0}
+  closedColor: {r: 0.56981134, g: 0.9666748, b: 1, a: 0}
 --- !u!1 &8492861223781223334
 GameObject:
   m_ObjectHideFlags: 0
@@ -755,6 +755,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RootOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1528593033282517545, guid: a38146cc1018e024d883466791382d50,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.6206077
       objectReference: {fileID: 0}
     - target: {fileID: 1528593033282517545, guid: a38146cc1018e024d883466791382d50,
         type: 3}

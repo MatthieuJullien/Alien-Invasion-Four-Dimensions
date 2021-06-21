@@ -50,11 +50,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a955b5ac06d322f40bfcf0a9e1dddf5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  label: 0
   uitext: {fileID: 7821907955404296274}
   statutImage: {fileID: 7821907955345158315}
   lockSprite: {fileID: 21300000, guid: 10467a51965ec4f8abe04190081e5636, type: 3}
   readySprite: {fileID: 21300000, guid: d360c761a90c641d9b704106d9dacba1, type: 3}
   completedSprite: {fileID: 21300000, guid: 0e07c8fb8158b4d95bc5184c10777d99, type: 3}
+  lockedColor: {r: 0.44705883, g: 0.5203364, b: 0.68235296, a: 1}
+  readyColor: {r: 1, g: 0, b: 0.08235294, a: 1}
+  completedColor: {r: 0, g: 1, b: 0.017773151, a: 1}
 --- !u!1 &7821907955345158293
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,9 +91,9 @@ RectTransform:
   m_Father: {fileID: 7821907955229137942}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -125.5, y: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 20, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7821907955345158314
@@ -157,14 +161,14 @@ RectTransform:
   m_GameObject: {fileID: 7821907955404296284}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.37494686, y: 0.37494686, z: 0.37494686}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children: []
   m_Father: {fileID: 7821907955229137942}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 165, y: -1.5}
+  m_AnchoredPosition: {x: 170, y: -1.5}
   m_SizeDelta: {x: 660, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7821907955404296273
@@ -188,7 +192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 0, b: 0.08333349, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

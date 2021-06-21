@@ -7,10 +7,11 @@ public class ObjectiveTriggerZone : TriggerZone
     protected new void OnTriggerEnter(Collider other)
     {
         int otherLayerMask = 1 << other.gameObject.layer;
-        if ((triggerLayers.value & otherLayerMask) == otherLayerMask)
+        if ((triggerLayers.value & otherLayerMask) != otherLayerMask) return;
+
+        if (ObjectiveManager.Instance.CompleteObjective(objectiveLabel))
         {
             enterAction.Invoke();
-            ObjectiveManager.Instance.CompleteObjective(objectiveLabel);
         }
     }
 }

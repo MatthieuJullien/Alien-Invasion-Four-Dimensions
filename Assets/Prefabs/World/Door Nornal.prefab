@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1375673945994685339
+--- !u!1 &2132946201231770531
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,42 +8,42 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8045427259666975278}
-  - component: {fileID: 9083732834399835019}
+  - component: {fileID: 6519832637796340581}
+  - component: {fileID: 4785846345974711120}
   m_Layer: 0
-  m_Name: Directional Light
+  m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8045427259666975278
+--- !u!4 &6519832637796340581
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1375673945994685339}
-  m_LocalRotation: {x: -0, y: -0, z: -1, w: -0.0000004768371}
-  m_LocalPosition: {x: 0, y: 3.58, z: 0}
+  m_GameObject: {fileID: 2132946201231770531}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 3.36, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4053019358143217865}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180}
---- !u!108 &9083732834399835019
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!108 &4785846345974711120
 Light:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1375673945994685339}
+  m_GameObject: {fileID: 2132946201231770531}
   m_Enabled: 1
   serializedVersion: 10
-  m_Type: 1
+  m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_Intensity: 0
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -121,7 +121,7 @@ Transform:
   m_GameObject: {fileID: 4053019357022044835}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1.9430219}
   m_Children: []
   m_Father: {fileID: 4053019358143217865}
   m_RootOrder: 2
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerLayers:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 1280
   enterAction:
     m_PersistentCalls:
       m_Calls:
@@ -342,7 +342,7 @@ Transform:
   - {fileID: 4053019358143308557}
   - {fileID: 4053019358143268749}
   - {fileID: 4053019357022044834}
-  - {fileID: 8045427259666975278}
+  - {fileID: 6519832637796340581}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -440,12 +440,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5585820267331f449b1da7b3b630bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spotlight: {fileID: 9083732834399835019}
-  openedLightIntensity: 2
+  doorlight: {fileID: 4785846345974711120}
+  openedLightIntensity: 1.3
   closedLightIntensity: 0.5
   deniedColor: {r: 1, g: 0, b: 0, a: 0}
   openedColor: {r: 0, g: 1, b: 0.09924388, a: 0}
-  closedColor: {r: 0.44935918, g: 0.6852464, b: 0.8018868, a: 0}
+  closedColor: {r: 0.28292987, g: 0.5591407, b: 0.8018868, a: 0}
 --- !u!1 &4053019358143688707
 GameObject:
   m_ObjectHideFlags: 0

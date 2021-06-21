@@ -2,14 +2,12 @@ using UnityEngine;
 
 public class DoorAccess : MonoBehaviour
 {
-    [SerializeField] private Light spotlight;
+    [SerializeField] private Light doorlight;
     [SerializeField] private float openedLightIntensity;
     [SerializeField] private float closedLightIntensity;
     [SerializeField] private Color deniedColor;
     [SerializeField] private Color openedColor;
     [SerializeField] private Color closedColor;
-
-
 
     private Animator _animator;
     private bool _hasAccess = false;
@@ -22,35 +20,39 @@ public class DoorAccess : MonoBehaviour
     private void Start()
     {
         ObjectiveManager.Instance.CompletedEvent.AddListener(OnAccessGained);
-        spotlight.color = closedColor;
-        spotlight.intensity = 0.5f;
+        doorlight.color = closedColor;
+        doorlight.intensity = closedLightIntensity;
     }
 
     public void TryOpenDoor()
     {
-        spotlight.intensity = openedLightIntensity;
+        doorlight.intensity = openedLightIntensity;
         if (_hasAccess)
         {
-            spotlight.color = openedColor;
+            doorlight.color = openedColor;
             _animator.SetTrigger("character_nearby");
         }
         else
         {
-            spotlight.color = deniedColor;
+            doorlight.color = deniedColor;
         }
+        Invoke(nameof(ResetLight), 2.5f);
     }
 
     public void TryCloseDoor()
     {
         _animator.ResetTrigger("character_nearby");
-        spotlight.color = closedColor;
-        spotlight.intensity = closedLightIntensity;
+    }
+
+    private void ResetLight()
+    {
+        doorlight.color = closedColor;
+        doorlight.intensity = closedLightIntensity;
     }
 
     public void OnAccessGained(ObjectiveEnum objectiveLabel)
     {
-        _hasAccess = true;
         if (objectiveLabel != ObjectiveEnum.GetAccessCodes) return;
-
+        _hasAccess = true;
     }
 }

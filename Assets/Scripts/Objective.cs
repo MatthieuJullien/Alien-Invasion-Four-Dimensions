@@ -9,6 +9,9 @@ public class Objective : MonoBehaviour
     [SerializeField] private Sprite lockSprite;
     [SerializeField] private Sprite readySprite;
     [SerializeField] private Sprite completedSprite;
+    [SerializeField] private Color lockedColor;
+    [SerializeField] private Color readyColor;
+    [SerializeField] private Color completedColor;
 
     public bool IsCompleted { get; private set; }
     public ObjectiveEnum Label { get => label; }
@@ -16,13 +19,13 @@ public class Objective : MonoBehaviour
     private void Awake()
     {
         IsCompleted = false;
-        uitext.color = Color.black;
+        uitext.color = lockedColor;
         statutImage.sprite = lockSprite;
     }
 
     public void Unlock()
     {
-        uitext.color = Color.white;
+        uitext.color = readyColor;
         uitext.fontStyle = FontStyle.Bold;
         statutImage.sprite = readySprite;
     }
@@ -30,7 +33,7 @@ public class Objective : MonoBehaviour
     public void Complete()
     {
         IsCompleted = true;
-        uitext.color = Color.green;
+        uitext.color = completedColor;
         uitext.fontStyle = FontStyle.Italic;
         statutImage.sprite = completedSprite;
     }

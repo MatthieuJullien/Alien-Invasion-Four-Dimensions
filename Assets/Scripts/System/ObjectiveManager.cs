@@ -12,7 +12,12 @@ public class NewObjectiveCompletedEvent : UnityEvent<ObjectiveEnum> { }
 public class ObjectiveManager : Singleton<ObjectiveManager>
 {
     [SerializeField] private Objective[] objectives;
+    [SerializeField] private GameObject alienQueenPrefab;
+    [SerializeField] private GameObject portalPrefab;
+
+
     private NewObjectiveCompletedEvent _completedEvent = new NewObjectiveCompletedEvent();
+
     public NewObjectiveCompletedEvent CompletedEvent { get => _completedEvent; }
 
     private int _currentObjectiveIndex;
@@ -21,12 +26,16 @@ public class ObjectiveManager : Singleton<ObjectiveManager>
     {
         _currentObjectiveIndex = 0;
         objectives[0].Unlock();
+
+        alienQueenPrefab.SetActive(false);
     }
 
-    public void CompleteObjective(ObjectiveEnum objectiveToComplete)
+    public bool CompleteObjective(ObjectiveEnum objectiveToComplete)
     {
-        if (objectiveToComplete != objectives[_currentObjectiveIndex].Label) return;
+        if (objectiveToComplete != objectives[_currentObjectiveIndex].Label)
+            return false;
         UnlockNextObjective();
+        return true;
     }
 
     private void UnlockNextObjective()
@@ -49,5 +58,10 @@ public class ObjectiveManager : Singleton<ObjectiveManager>
             }
         }
         return false;
+    }
+
+    public void OpenPortal()
+    {
+        alienQueenPrefab.SetActive(true);
     }
 }
