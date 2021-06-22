@@ -62,7 +62,7 @@ public class GameManager : Singleton<GameManager>
             PlayerViewPoint.TopDown => PlayerViewPoint.SideView,
             PlayerViewPoint.SideView => PlayerViewPoint.FirstPerson,
             PlayerViewPoint.FirstPerson => PlayerViewPoint.Isometric,
-            PlayerViewPoint.Isometric => PlayerViewPoint.SideView
+            PlayerViewPoint.Isometric => PlayerViewPoint.TopDown
         };
         SelectViewPoint(nextViewPoint);
     }
