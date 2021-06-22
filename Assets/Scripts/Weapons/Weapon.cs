@@ -9,11 +9,20 @@ public class Weapon : MonoBehaviour
     [SerializeField] protected Transform[] worldProjectileSpawnPoints;
     [SerializeField] private GameObject fpsModel;
     [SerializeField] private GameObject worldModel;
+    [SerializeField] private int audioWeaponSwitchValue = 0;
+
 
     private float reloadTimer = Mathf.NegativeInfinity;
     private Animation animationReader;
     private Animation fpsAnim;
     private Animation worldAnim;
+
+    // Audio
+    private GameObject player;
+    private Rigidbody playerRigidbody;
+    private static AudioManager audioMan;
+    private FMOD.Studio.EventInstance weapons;
+    private FMOD.Studio.PARAMETER_ID wSwitch;
 
     public bool IsLoaded { get; private set; }
 
@@ -34,10 +43,19 @@ public class Weapon : MonoBehaviour
         {
             Debug.Log($"The reload duration of {gameObject.name} must be longer than the shooting animation (anim = {animationReader.clip.length}).");
         }
+
+        audioMan = AudioManager.Instance;
+        player = GameObject.Find("Player");
+        playerRigidbody = player.GetComponent<Rigidbody>();
+        weapons = audioMan.PlayerWeaponsEvent;
+        wSwitch = audioMan.WeaponSwitch;
     }
 
     private void Update()
     {
+        //Update 3d sound position
+        FMODUnity.RuntimeManager.AttachInstanceToGameObject(weapons, player.transform, playerRigidbody);
+
         if (reloadTimer >= reloadDuration)
         {
             IsLoaded = true;
@@ -72,6 +90,11 @@ public class Weapon : MonoBehaviour
     {
         if (!IsLoaded)
             return;
+
+        //setting switch to current weapon
+        audioMan.SetLabeledParameter(weapons, wSwitch, audioWeaponSwitchValue);
+        //playing sound
+        audioMan.Play(weapons);
 
         Transform[] spawnPoints;
         if (GameManager.Instance.IsCurrentViewFPS)

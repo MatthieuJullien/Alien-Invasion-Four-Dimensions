@@ -20,6 +20,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private MovementConfig fpsMvtCfg;
     [SerializeField] private MovementConfig isoMvtCfg;
 
+    private AudioManager audioMan;
+
     private Rigidbody playerRigidbody;
     private CharacterMovement playerMovement;
     private MultipleViewPlayerController playerController;
@@ -33,6 +35,8 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
+        audioMan = AudioManager.Instance;
+
         playerRigidbody = playerTransform.gameObject.GetComponent<Rigidbody>();
         playerMovement = playerTransform.gameObject.GetComponent<CharacterMovement>();
         playerController = playerTransform.gameObject.GetComponent<MultipleViewPlayerController>();
@@ -50,6 +54,7 @@ public class GameManager : Singleton<GameManager>
         isCurrentViewFPS = GameManager.Instance.ViewPoint == PlayerViewPoint.FirstPerson;
     }
 
+
     private void ChangeToNextViewPoint()
     {
         PlayerViewPoint nextViewPoint = ViewPoint switch
@@ -57,8 +62,7 @@ public class GameManager : Singleton<GameManager>
             PlayerViewPoint.TopDown => PlayerViewPoint.SideView,
             PlayerViewPoint.SideView => PlayerViewPoint.FirstPerson,
             PlayerViewPoint.FirstPerson => PlayerViewPoint.Isometric,
-            PlayerViewPoint.Isometric => PlayerViewPoint.TopDown,
-            _ => throw new System.NotImplementedException()
+            PlayerViewPoint.Isometric => PlayerViewPoint.SideView
         };
         SelectViewPoint(nextViewPoint);
     }
@@ -113,6 +117,9 @@ public class GameManager : Singleton<GameManager>
 
     public void SelectIso()
     {
+        //change listener
+        audioMan.SetListenerCamera(isoCamera);
+
         ViewPoint = PlayerViewPoint.Isometric;
         playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
@@ -121,10 +128,13 @@ public class GameManager : Singleton<GameManager>
         fpsCamera.enabled = false;
         worldCamera.enabled = false;
         isoCamera.enabled = true;
+
     }
 
     public void SelectTopDown()
     {
+        audioMan.SetListenerCamera(worldCamera);
+
         ViewPoint = PlayerViewPoint.TopDown;
         playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
@@ -142,6 +152,8 @@ public class GameManager : Singleton<GameManager>
 
     public void SelectSideView()
     {
+        audioMan.SetListenerCamera(worldCamera);
+
         ViewPoint = PlayerViewPoint.SideView;
         playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
@@ -154,15 +166,20 @@ public class GameManager : Singleton<GameManager>
         fpsCamera.enabled = false;
         worldCamera.enabled = true;
         isoCamera.enabled = false;
+
     }
 
     public void SelectFPS()
     {
+
+        audioMan.SetListenerCamera(fpsCamera);
+
         ViewPoint = PlayerViewPoint.FirstPerson;
         playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
         fpsCamera.enabled = true;
         worldCamera.enabled = false;
         isoCamera.enabled = false;
+
     }
 }
