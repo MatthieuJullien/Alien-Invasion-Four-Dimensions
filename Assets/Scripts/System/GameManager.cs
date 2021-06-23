@@ -11,6 +11,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private Camera fpsCamera;
     [SerializeField] private Camera worldCamera;
     [SerializeField] private Camera isoCamera;
+    [SerializeField] private MinimapCameraController minimap;
+
     [SerializeField] private Transform worldWeaponTransform;
     [SerializeField] private Transform playerTransform;
 
@@ -27,11 +29,17 @@ public class GameManager : Singleton<GameManager>
     private MultipleViewPlayerController playerController;
 
     private MovementConfig currentMvtCongif;
-    private bool isCurrentViewFPS;
+    //private bool isCurrentViewFPS;
 
-    public bool IsCurrentViewFPS { get => isCurrentViewFPS; }
+    public bool IsCurrentViewFPS { get => (ViewPoint == PlayerViewPoint.FirstPerson); }
 
     public PlayerViewPoint ViewPoint { get; private set; }
+
+    public override void Awake()
+    {
+        base.Awake();
+        ViewPoint = startingViewPoint; // dangerous way to tell other class what is the starting viewpoint
+    }
 
     private void Start()
     {
@@ -51,7 +59,7 @@ public class GameManager : Singleton<GameManager>
         {
             ChangeToNextViewPoint();
         }
-        isCurrentViewFPS = GameManager.Instance.ViewPoint == PlayerViewPoint.FirstPerson;
+        //isCurrentViewFPS = (ViewPoint == PlayerViewPoint.FirstPerson);
     }
 
 
@@ -128,7 +136,7 @@ public class GameManager : Singleton<GameManager>
         fpsCamera.enabled = false;
         worldCamera.enabled = false;
         isoCamera.enabled = true;
-
+        minimap.ToggleViewpoint(IsCurrentViewFPS);
     }
 
     public void SelectTopDown()
@@ -148,6 +156,7 @@ public class GameManager : Singleton<GameManager>
         fpsCamera.enabled = false;
         worldCamera.enabled = true;
         isoCamera.enabled = false;
+        minimap.ToggleViewpoint(IsCurrentViewFPS);
     }
 
     public void SelectSideView()
@@ -166,7 +175,7 @@ public class GameManager : Singleton<GameManager>
         fpsCamera.enabled = false;
         worldCamera.enabled = true;
         isoCamera.enabled = false;
-
+        minimap.ToggleViewpoint(IsCurrentViewFPS);
     }
 
     public void SelectFPS()
@@ -180,6 +189,6 @@ public class GameManager : Singleton<GameManager>
         fpsCamera.enabled = true;
         worldCamera.enabled = false;
         isoCamera.enabled = false;
-
+        minimap.ToggleViewpoint(IsCurrentViewFPS);
     }
 }
