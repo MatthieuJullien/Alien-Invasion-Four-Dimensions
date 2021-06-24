@@ -15,12 +15,13 @@ public class ObjectiveManager : Singleton<ObjectiveManager>
     [SerializeField] private GameObject alienQueenPrefab;
     [SerializeField] private GameObject portalPrefab;
 
-
     private NewObjectiveCompletedEvent _completedEvent = new NewObjectiveCompletedEvent();
 
     public NewObjectiveCompletedEvent CompletedEvent { get => _completedEvent; }
 
     private int _currentObjectiveIndex;
+
+    public Vector3 CurrentObjectivePosition { get => objectives[_currentObjectiveIndex].Position; }
 
     private void Start()
     {

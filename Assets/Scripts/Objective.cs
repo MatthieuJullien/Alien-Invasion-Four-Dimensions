@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class Objective : MonoBehaviour
 {
     [SerializeField] private ObjectiveEnum label;
+    [SerializeField] private Vector3 position;
     [SerializeField] private Text uitext;
     [SerializeField] private Image statutImage;
     [SerializeField] private Sprite lockSprite;
@@ -15,6 +16,7 @@ public class Objective : MonoBehaviour
 
     public bool IsCompleted { get; private set; }
     public ObjectiveEnum Label { get => label; }
+    public Vector3 Position { get => position; }
 
     private void Awake()
     {
