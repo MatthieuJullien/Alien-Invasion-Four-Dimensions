@@ -70,7 +70,8 @@ public class GameManager : Singleton<GameManager>
             PlayerViewPoint.TopDown => PlayerViewPoint.SideView,
             PlayerViewPoint.SideView => PlayerViewPoint.FirstPerson,
             PlayerViewPoint.FirstPerson => PlayerViewPoint.Isometric,
-            PlayerViewPoint.Isometric => PlayerViewPoint.TopDown
+            PlayerViewPoint.Isometric => PlayerViewPoint.TopDown,
+            _ => throw new System.NotImplementedException()
         };
         SelectViewPoint(nextViewPoint);
     }
