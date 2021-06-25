@@ -11,7 +11,6 @@ public class ConsoleText : MonoBehaviour
 
     private List<string> lineBuffer = new List<string>();
     private int startLine = 0;
-    private int randomTextInterval = 0;
     private float lastRefreshTime = Mathf.NegativeInfinity;
 
     private void Start()
@@ -19,15 +18,15 @@ public class ConsoleText : MonoBehaviour
         lineBuffer.AddRange(textMesh.text.Split('\n'));
     }
 
-    void OnEnable()
-    {
-        Application.logMessageReceived += HandleLog;
-    }
+    //void OnEnable()
+    //{
+    //    Application.logMessageReceived += HandleLog;
+    //}
 
-    void OnDisable()
-    {
-        Application.logMessageReceived -= HandleLog;
-    }
+    //void OnDisable()
+    //{
+    //    Application.logMessageReceived -= HandleLog;
+    //}
 
     private void Update()
     {
@@ -35,27 +34,31 @@ public class ConsoleText : MonoBehaviour
         {
             RefreshScreen();
             lastRefreshTime = Time.time;
-
         }
     }
 
-    void HandleLog(string logString, string stackTrace, LogType type)
-    {
-        lineBuffer.AddRange(logString.Split('\n'));
-        lineBuffer.AddRange(stackTrace.Split('\n'));
-    }
+    //void HandleLog(string logString, string stackTrace, LogType type)
+    //{
+    //    lineBuffer.AddRange(logString.Split('\n'));
+    //    lineBuffer.AddRange(stackTrace.Split('\n'));
+    //}
 
     private void RefreshScreen()
     {
-        randomTextInterval++;
-        if (randomTextInterval > 5)
+        startLine++;
+        if (startLine + nbLineOnScreen >= lineBuffer.Count)
         {
-            lineBuffer.Sort((a, b) => Mathf.FloorToInt(UnityEngine.Random.value * lineBuffer.Count));
-            randomTextInterval = 0;
-        }
-        else
-        {
-            startLine++;
+            startLine = 0;
+
+            // Random shuffle
+            for (int i = 0; i < lineBuffer.Count; i++)
+            {
+                string temp = lineBuffer[i];
+                int randomIndex = UnityEngine.Random.Range(i, lineBuffer.Count);
+                lineBuffer[i] = lineBuffer[randomIndex];
+                lineBuffer[randomIndex] = temp;
+            }
+
         }
         textMesh.text = String.Join("\n", lineBuffer.GetRange(startLine, nbLineOnScreen));
     }

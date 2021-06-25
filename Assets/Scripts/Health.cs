@@ -12,7 +12,6 @@ public class Health : MonoBehaviour
     public bool IsDead { get; private set; }
     public int HealthPoints { get => Mathf.CeilToInt(_currentHealthPoints); }
 
-
     private void Start()
     {
         _currentHealthPoints = maxHealthPoints;

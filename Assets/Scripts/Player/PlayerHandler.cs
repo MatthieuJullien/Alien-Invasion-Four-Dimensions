@@ -36,6 +36,12 @@ public class PlayerHandler : MonoBehaviour
             fpsWorkTools.SetActive(fpsView);
             worldMechanicModels.SetActive(!fpsView);
         }
+
+        // player is in the wrong place
+        if (transform.position.y < -20f)
+        {
+            _health.TakeDamage(100f);
+        }
     }
 
     public void Die()

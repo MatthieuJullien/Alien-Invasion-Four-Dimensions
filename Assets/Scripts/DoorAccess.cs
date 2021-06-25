@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DoorAccess : MonoBehaviour
 {
-    [SerializeField] private Light doorlight;
+    [SerializeField] private Light[] doorLights;
     [SerializeField] private float openedLightIntensity;
     [SerializeField] private float closedLightIntensity;
     [SerializeField] private Color deniedColor;
@@ -15,26 +15,36 @@ public class DoorAccess : MonoBehaviour
     private void Awake()
     {
         _animator = GetComponent<Animator>();
+        doorLights = GetComponentsInChildren<Light>();
     }
 
     private void Start()
     {
         ObjectiveManager.Instance.CompletedEvent.AddListener(OnAccessGained);
-        doorlight.color = closedColor;
-        doorlight.intensity = closedLightIntensity;
+        foreach (var l in doorLights)
+        {
+            l.color = closedColor;
+            l.intensity = closedLightIntensity;
+        }
     }
 
     public void TryOpenDoor()
     {
-        doorlight.intensity = openedLightIntensity;
+        Color color;
         if (_hasAccess)
         {
-            doorlight.color = openedColor;
+            color = openedColor;
             _animator.SetTrigger("character_nearby");
         }
         else
         {
-            doorlight.color = deniedColor;
+            color = deniedColor;
+        }
+
+        foreach (var l in doorLights)
+        {
+            l.color = color;
+            l.intensity = openedLightIntensity;
         }
         Invoke(nameof(ResetLight), 2.5f);
     }
@@ -46,8 +56,11 @@ public class DoorAccess : MonoBehaviour
 
     private void ResetLight()
     {
-        doorlight.color = closedColor;
-        doorlight.intensity = closedLightIntensity;
+        foreach (var l in doorLights)
+        {
+            l.color = closedColor;
+            l.intensity = closedLightIntensity;
+        }
     }
 
     public void OnAccessGained(ObjectiveEnum objectiveLabel)
