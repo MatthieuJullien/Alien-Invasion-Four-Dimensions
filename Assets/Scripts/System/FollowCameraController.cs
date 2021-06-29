@@ -6,6 +6,8 @@ public class FollowCameraController : MonoBehaviour
     [SerializeField] private float distanceToTarget = 15.0f;
     [SerializeField] private float followSpeed = 3.0f;
 
+    public float DistanceToTarget { get => distanceToTarget; }
+
     private Vector3 CameraRelativePosition
     {
         get { return targetTransform.position - transform.forward * distanceToTarget; }

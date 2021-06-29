@@ -56,6 +56,7 @@ public class Alien : MonoBehaviour
     private Health _health;
     private Animator _animator;
     private NavMeshAgent _navMeshAgent;
+    private NavMeshObstacle _navMeshObstacle;
     private Collider[] _thisColliders;
 
     private AlienState _state = AlienState.Respawn;
@@ -93,6 +94,7 @@ public class Alien : MonoBehaviour
         _health = GetComponent<Health>();
         _animator = GetComponent<Animator>();
         _navMeshAgent = GetComponent<NavMeshAgent>();
+        _navMeshObstacle = GetComponent<NavMeshObstacle>();
         _thisColliders = GetComponentsInChildren<Collider>();
 
         _playerGameObject = GameObject.FindWithTag("Player");
@@ -104,6 +106,8 @@ public class Alien : MonoBehaviour
 
     private void Start()
     {
+        _navMeshObstacle.enabled = false;
+        _navMeshAgent.avoidancePriority = Mathf.RoundToInt(UnityEngine.Random.Range(0f, 30f));
         _duplicationTimer = duplicationInterval;
         _targetPosition = transform.position;
         alienRenderer.material = respawnMaterial;
@@ -172,6 +176,8 @@ public class Alien : MonoBehaviour
     private void StartPatrol()
     {
         _state = AlienState.Patrol;
+        _navMeshObstacle.enabled = false;
+        _navMeshAgent.enabled = true;
         ChangeAnimation(MOVE_ANIM);
         _navMeshAgent.destination = ChooseRandomTarget(); ;
     }
@@ -179,6 +185,8 @@ public class Alien : MonoBehaviour
     private void StartPursuit()
     {
         _state = AlienState.Pursuit;
+        _navMeshObstacle.enabled = false;
+        _navMeshAgent.enabled = true;
         ChangeAnimation(MOVE_ANIM);
         _navMeshAgent.destination = _playerTransform.position;
     }
@@ -186,6 +194,9 @@ public class Alien : MonoBehaviour
     private void StartAttack()
     {
         _state = AlienState.Attak;
+        _navMeshAgent.SetDestination(transform.position);
+        _navMeshObstacle.enabled = true;
+        _navMeshAgent.enabled = false;
     }
 
     private void UpdatePatrol()
@@ -235,6 +246,11 @@ public class Alien : MonoBehaviour
         {
             StartAttack();
         }
+        else if (DistanceToPlayer <= _navMeshAgent.stoppingDistance * 1.35f)
+        {
+            _navMeshAgent.destination = _playerTransform.position;
+            RotateToward(_navMeshAgent.destination);
+        }
         else
         {
             // Attempt to implement pursuit steering behavior:
@@ -253,7 +269,7 @@ public class Alien : MonoBehaviour
             return;
         }
 
-        if (DistanceToPlayer > _navMeshAgent.stoppingDistance)
+        if (DistanceToPlayer > _navMeshAgent.stoppingDistance + 0.2f)
         {
             StartPursuit();
             return;
@@ -268,7 +284,7 @@ public class Alien : MonoBehaviour
         if (_duplicationTimer > 0) return;
 
         Vector3 spawnPosition = transform.position;
-        spawnPosition.y += 1f;
+        spawnPosition.y += 0.5f;
         Alien newAlien = Instantiate(alienPrefab, spawnPosition, Quaternion.identity);
         newAlien.maxDuplication--;
         _duplicationTimer = duplicationInterval + Random.value;

@@ -18,7 +18,6 @@ public class ConstrainedMouseLook : MouseLook
         {
             case PlayerViewPoint.Isometric:
                 HorizontalLookRotation(movement);
-                VerticalLookRotation(cameraTransform);
                 break;
             case PlayerViewPoint.TopDown:
                 HorizontalLookRotation(movement);
@@ -52,14 +51,13 @@ public class ConstrainedMouseLook : MouseLook
     private void HorizontalLookRotation(CharacterMovement movement)
     {
         var yaw = Input.GetAxis("Mouse X") * lateralSensitivity;
-
         if (GameManager.Instance.ViewPoint == PlayerViewPoint.SideView)
         {
-            if (yaw > 0)
+            if (yaw > 1f)
             {
                 movement.rotation = Quaternion.LookRotation(Vector3.right);
             }
-            else if (yaw < 0)
+            else if (yaw < -1f)
             {
                 movement.rotation = Quaternion.LookRotation(Vector3.left);
             }
@@ -80,7 +78,54 @@ public class ConstrainedMouseLook : MouseLook
             }
         }
 
-        UpdateCursorLock();
+        /*
+        if (GameManager.Instance.ViewPoint == PlayerViewPoint.FirstPerson)
+        {
+            var yaw = Input.GetAxis("Mouse X") * lateralSensitivity;
+            var yawRotation = Quaternion.Euler(0.0f, yaw, 0.0f);
+            characterTargetRotation *= yawRotation;
+
+            if (smooth)
+            {
+                movement.rotation = Quaternion.Slerp(movement.rotation, characterTargetRotation,
+                    smoothTime * Time.deltaTime);
+            }
+            else
+            {
+                movement.rotation *= yawRotation;
+            }
+        }
+        else // not FirstPerson viewpoint
+        {
+            Camera cam = GameManager.Instance.CurrentCamera;
+            FollowCameraController followCam = cam.GetComponent<FollowCameraController>();
+            float dist = followCam.DistanceToTarget;
+
+            Vector3 direction = cam.ScreenPointToRay(Input.mousePosition).direction;
+            Vector3 cursorPosition = cam.transform.position + direction * dist;
+
+            if (GameManager.Instance.ViewPoint == PlayerViewPoint.SideView)
+            {
+                if (cursorPosition.x > transform.position.x)
+                {
+                    movement.rotation = Quaternion.LookRotation(Vector3.right);
+                }
+                else if (cursorPosition.x < transform.position.x)
+                {
+                    movement.rotation = Quaternion.LookRotation(Vector3.left);
+                }
+            }
+            else // topdown or iso
+            {
+                cursorPosition = new Vector3(cursorPosition.x, transform.position.y, cursorPosition.z);
+                movement.rotation = Quaternion.Slerp(movement.rotation, Quaternion.LookRotation(cursorPosition - transform.position), Time.deltaTime * 7f);
+                //transform.rotation = Quaternion.Euler(0, transform.rotation.y, transform.rotation.z);
+                //movement.rotation = Quaternion.LookRotation();
+            }
+
+            //UpdateCursorLock();
+        }
+        */
     }
 
     public void VerticalLookRotation(Transform cameraTransform)
@@ -103,7 +148,7 @@ public class ConstrainedMouseLook : MouseLook
                 cameraTransform.localRotation = ClampPitch(cameraTransform.localRotation);
         }
 
-        UpdateCursorLock();
+        //UpdateCursorLock();
         UpdateFollowers();
     }
 }

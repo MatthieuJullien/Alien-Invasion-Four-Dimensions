@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57af91cbb7b78c942a8cf00256fcdc99, type: 3}
   m_Name: SIDE movement config
   m_EditorClassIdentifier: 
-  baseJumpHeight: 2
-  extraJumpPower: 25
+  baseJumpHeight: 1.3
+  extraJumpPower: 40
   speed: 12
   runSpeedMultiplier: 2
   airControl: 0.8

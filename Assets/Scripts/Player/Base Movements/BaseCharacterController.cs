@@ -499,14 +499,12 @@ public class BaseCharacterController : MonoBehaviour
         if (pause && !isPaused)
         {
             // Pause 
-
             movement.Pause(true);
             isPaused = true;
         }
         else if (!pause && isPaused)
         {
             // Resume
-
             movement.Pause(false, restoreVelocityOnResume);
             isPaused = false;
         }
@@ -884,40 +882,32 @@ public class BaseCharacterController : MonoBehaviour
     public virtual void FixedUpdate()
     {
         // Pause / resume character
-
         Pause();
 
         // If paused, return
-
         if (isPaused)
             return;
 
         // Perform character movement
-
         Move();
 
         // Handle crouch
-
         Crouch();
     }
 
     public virtual void Update()
     {
         // Handle input
-
         HandleInput();
 
         // If paused, return
-
         if (isPaused)
             return;
 
         // Update character rotation (if not paused)
-
         UpdateRotation();
 
         // Perform character animation (if not paused)
-
         Animate();
     }
 

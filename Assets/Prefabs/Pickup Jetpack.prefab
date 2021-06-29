@@ -1,0 +1,144 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4104186406237114031
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3728751132582892565}
+  - component: {fileID: 293003302432365488}
+  - component: {fileID: 2590699785550802810}
+  - component: {fileID: 818954877733221019}
+  m_Layer: 0
+  m_Name: Placeholder Jetpack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3728751132582892565
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4104186406237114031}
+  m_LocalRotation: {x: -0, y: -0.99144495, z: -0, w: -0.13052586}
+  m_LocalPosition: {x: -79.5, y: 0.49731457, z: -19.491524}
+  m_LocalScale: {x: 30, y: 30, z: 30}
+  m_Children: []
+  m_Father: {fileID: 7688730951964680267}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -195, z: 0}
+--- !u!33 &293003302432365488
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4104186406237114031}
+  m_Mesh: {fileID: 2132019842022078190, guid: d14f0e096b948c44f886699c689f52b4, type: 3}
+--- !u!23 &2590699785550802810
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4104186406237114031}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 7066833431880342390, guid: d14f0e096b948c44f886699c689f52b4, type: 3}
+  - {fileID: -1580535799172915004, guid: d14f0e096b948c44f886699c689f52b4, type: 3}
+  - {fileID: 1580425153221892833, guid: d14f0e096b948c44f886699c689f52b4, type: 3}
+  - {fileID: -5243988174349660497, guid: d14f0e096b948c44f886699c689f52b4, type: 3}
+  - {fileID: 7490952440742008943, guid: d14f0e096b948c44f886699c689f52b4, type: 3}
+  - {fileID: 9003353085549565770, guid: d14f0e096b948c44f886699c689f52b4, type: 3}
+  - {fileID: 5561349426305759274, guid: d14f0e096b948c44f886699c689f52b4, type: 3}
+  - {fileID: 4780151217934189340, guid: d14f0e096b948c44f886699c689f52b4, type: 3}
+  - {fileID: -5996605353644937571, guid: d14f0e096b948c44f886699c689f52b4, type: 3}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &818954877733221019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4104186406237114031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87c082ee1b1df6d4c8d1ed84a21d9124, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickupAction:
+    m_PersistentCalls:
+      m_Calls: []
+  pickupEffect: {fileID: 198354506248529134, guid: 27c09fea11be34b148f96c4e2b673aa3,
+    type: 3}
+  pickupModelTransform: {fileID: 0}
+  colliderScaling: 1.5
+  height: 0.4
+  respawnInterval: 0
+--- !u!1 &6347804878011940445
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7688730951964680267}
+  m_Layer: 0
+  m_Name: Pickup Jetpack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7688730951964680267
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6347804878011940445}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3728751132582892565}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

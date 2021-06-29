@@ -32,8 +32,8 @@ public class GameManager : Singleton<GameManager>
     //private bool isCurrentViewFPS;
 
     public bool IsCurrentViewFPS { get => (ViewPoint == PlayerViewPoint.FirstPerson); }
-
     public PlayerViewPoint ViewPoint { get; private set; }
+    public Camera CurrentCamera { get; private set; }
 
     public override void Awake()
     {
@@ -44,6 +44,9 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         audioMan = AudioManager.Instance;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         playerRigidbody = playerTransform.gameObject.GetComponent<Rigidbody>();
         playerMovement = playerTransform.gameObject.GetComponent<CharacterMovement>();
@@ -95,7 +98,6 @@ public class GameManager : Singleton<GameManager>
             default:
                 break;
         }
-        UpdateControlSettings();
     }
 
     private void UpdateControlSettings()
@@ -128,43 +130,36 @@ public class GameManager : Singleton<GameManager>
     {
         //change listener
         audioMan.SetListenerCamera(isoCamera);
-
         ViewPoint = PlayerViewPoint.Isometric;
+
         playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        PutArmsHorizontally();
 
         worldCamera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
 
-        fpsCamera.enabled = false;
-        worldCamera.enabled = false;
-        isoCamera.enabled = true;
+        SetCamera(isoCamera);
         minimap.ToggleViewpoint(IsCurrentViewFPS);
+        UpdateControlSettings();
     }
 
     public void SelectTopDown()
     {
         audioMan.SetListenerCamera(worldCamera);
-
         ViewPoint = PlayerViewPoint.TopDown;
+
         playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        PutArmsHorizontally();
 
-        // put arms horizontally
-        Vector3 eulerAngles = fpsCamera.transform.rotation.eulerAngles;
-        eulerAngles.x = 0f;
-        fpsCamera.transform.rotation = Quaternion.Euler(eulerAngles);
-        worldWeaponTransform.rotation = Quaternion.Euler(eulerAngles);
-        worldCamera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-
-        fpsCamera.enabled = false;
-        worldCamera.enabled = true;
-        isoCamera.enabled = false;
+        SetCamera(worldCamera);
         minimap.ToggleViewpoint(IsCurrentViewFPS);
+        UpdateControlSettings();
     }
 
     public void SelectSideView()
     {
         audioMan.SetListenerCamera(worldCamera);
-
         ViewPoint = PlayerViewPoint.SideView;
+
         playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
         playerMovement.cachedRigidbody.MoveRotation(Quaternion.LookRotation(Vector3.right));
@@ -173,23 +168,37 @@ public class GameManager : Singleton<GameManager>
         //worldCamera.orthographic = false;
         worldCamera.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 
-        fpsCamera.enabled = false;
-        worldCamera.enabled = true;
-        isoCamera.enabled = false;
+        SetCamera(worldCamera);
         minimap.ToggleViewpoint(IsCurrentViewFPS);
+        UpdateControlSettings();
     }
 
     public void SelectFPS()
     {
-
         audioMan.SetListenerCamera(fpsCamera);
-
         ViewPoint = PlayerViewPoint.FirstPerson;
+
         playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
-        fpsCamera.enabled = true;
-        worldCamera.enabled = false;
-        isoCamera.enabled = false;
+        SetCamera(fpsCamera);
         minimap.ToggleViewpoint(IsCurrentViewFPS);
+        UpdateControlSettings();
+    }
+
+    private void SetCamera(Camera cam)
+    {
+        fpsCamera.enabled = fpsCamera == cam;
+        worldCamera.enabled = worldCamera == cam;
+        isoCamera.enabled = isoCamera == cam;
+        CurrentCamera = cam;
+    }
+
+    private void PutArmsHorizontally()
+    {
+        Vector3 eulerAngles = fpsCamera.transform.rotation.eulerAngles;
+        eulerAngles.x = 0f;
+        fpsCamera.transform.rotation = Quaternion.Euler(eulerAngles);
+        worldWeaponTransform.rotation = Quaternion.Euler(eulerAngles);
+        worldCamera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
     }
 }

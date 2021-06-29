@@ -217,7 +217,6 @@ public class MouseLook : MonoBehaviour
     public virtual void UpdateCursorLock()
     {
         // If the user set "lockCursor" we check & properly lock the cursos
-
         if (lockCursor)
             InternalLockUpdate();
     }

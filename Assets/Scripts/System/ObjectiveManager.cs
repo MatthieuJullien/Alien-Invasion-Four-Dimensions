@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public enum ObjectiveEnum
 {
-    GetAccessCodes, GetWeapons, OpenPortal, SurchargeReactor, EscapeStation
+    GetAccessCodes, GetWeapons, OpenPortal, GetJumpBooster, SurchargeReactor, EscapeStation
 }
 
 [System.Serializable]
@@ -12,8 +12,12 @@ public class NewObjectiveCompletedEvent : UnityEvent<ObjectiveEnum> { }
 public class ObjectiveManager : Singleton<ObjectiveManager>
 {
     [SerializeField] private Objective[] objectives;
-    [SerializeField] private GameObject alienQueenPrefab;
-    [SerializeField] private GameObject portalPrefab;
+
+
+    [SerializeField] private GameObject portalPrefab1;
+    [SerializeField] private GameObject alienQueenPortal1;
+    [SerializeField] private GameObject portalPrefab2;
+    [SerializeField] private GameObject alienQueenPortal2;
 
     private NewObjectiveCompletedEvent _completedEvent = new NewObjectiveCompletedEvent();
 
@@ -28,7 +32,8 @@ public class ObjectiveManager : Singleton<ObjectiveManager>
         _currentObjectiveIndex = 0;
         objectives[0].Unlock();
 
-        alienQueenPrefab.SetActive(false);
+        alienQueenPortal1.SetActive(false);
+        alienQueenPortal2.SetActive(false);
     }
 
     public bool CompleteObjective(ObjectiveEnum objectiveToComplete)
@@ -39,7 +44,7 @@ public class ObjectiveManager : Singleton<ObjectiveManager>
         return true;
     }
 
-    private void UnlockNextObjective()
+    public void UnlockNextObjective()
     {
         var currentObjective = objectives[_currentObjectiveIndex];
         currentObjective.Complete();
@@ -63,6 +68,17 @@ public class ObjectiveManager : Singleton<ObjectiveManager>
 
     public void OpenPortal()
     {
-        alienQueenPrefab.SetActive(true);
+        alienQueenPortal1.SetActive(true);
+        alienQueenPortal2.SetActive(true);
+        var vfx = portalPrefab1.GetComponentsInChildren<ParticleSystem>();
+        foreach (var effect in vfx)
+        {
+            effect.Play();
+        }
+        vfx = portalPrefab2.GetComponentsInChildren<ParticleSystem>();
+        foreach (var effect in vfx)
+        {
+            effect.Play();
+        }
     }
 }

@@ -3256,6 +3256,7 @@ GameObject:
   - component: {fileID: 1794941955}
   - component: {fileID: 1794941957}
   - component: {fileID: 3197533127133466616}
+  - component: {fileID: 641416696271885023}
   m_Layer: 10
   m_Name: Alien
   m_TagString: Untagged
@@ -3354,7 +3355,7 @@ MonoBehaviour:
   maxDuplication: 3
   attackCooldown: 1
   attackDamage: 20
-  turnSpeed: 0.5
+  turnSpeed: 1
   targetChangeInterval: 2
   targetChangeDistance: 20
 --- !u!54 &1794941954
@@ -3408,8 +3409,8 @@ NavMeshAgent:
   m_GameObject: {fileID: 6065870725055008153}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1
-  m_Speed: 3.4
+  m_Radius: 1.3
+  m_Speed: 3.6
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 70
@@ -3421,6 +3422,22 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!208 &641416696271885023
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6065870725055008153}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 1, y: 1.5, z: 1}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &6065874289938648075
 GameObject:
   m_ObjectHideFlags: 0
@@ -4667,6 +4684,7 @@ GameObject:
   - component: {fileID: 366715157437697771}
   - component: {fileID: 4290735134929090044}
   - component: {fileID: 374620588434020651}
+  - component: {fileID: 8736201208353159995}
   m_Layer: 11
   m_Name: Alien Marker
   m_TagString: Untagged
@@ -4683,7 +4701,7 @@ Transform:
   m_GameObject: {fileID: 8171614928258084824}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 6064079309210417183}
   m_RootOrder: 4
@@ -4750,6 +4768,19 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8736201208353159995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8171614928258084824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 874c8ad340a939f408431bdf812fe61b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shrinkSpeed: 1.6
 --- !u!1001 &5434908447483050383
 PrefabInstance:
   m_ObjectHideFlags: 0

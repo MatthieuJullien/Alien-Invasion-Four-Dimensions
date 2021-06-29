@@ -3,7 +3,8 @@ using UnityEngine;
 public class MinimapCameraController : MonoBehaviour
 {
     [SerializeField] private Transform playerTransform;
-    [SerializeField] private Transform objectiveMarkerTransform;
+    [SerializeField] private Transform rootObjectiveMarkerTransform;
+    [SerializeField] private MeshRenderer objectiveMarkerMeshRenderer;
 
     private bool orientAsWorld;
     private ObjectiveManager objectiveManager;
@@ -34,16 +35,16 @@ public class MinimapCameraController : MonoBehaviour
     {
         Vector3 playerPosition = playerTransform.position;
         var objPos = objectiveManager.CurrentObjectivePosition;
-        if (Vector3.Distance(playerPosition, objPos) < 3f)
+
+        if (Vector3.Distance(playerPosition, objPos) < 10f)
         {
-            objectiveMarkerTransform.gameObject.SetActive(false);
-            return;
+            objectiveMarkerMeshRenderer.enabled = false;
         }
         else
         {
-            objectiveMarkerTransform.gameObject.SetActive(true);
+            objectiveMarkerMeshRenderer.enabled = true;
+            rootObjectiveMarkerTransform.LookAt(new Vector3(objPos.x, playerPosition.y, objPos.z));
         }
-        objectiveMarkerTransform.LookAt(new Vector3(objPos.x, playerPosition.y, objPos.z));
     }
 
     public void ToggleViewpoint(bool isFPS)
