@@ -8,18 +8,20 @@ public class AudioManager : Singleton<AudioManager>
     private FMOD.ATTRIBUTES_3D currentAttributes = new FMOD.ATTRIBUTES_3D();
     private FMOD.ATTRIBUTES_3D previousAttributes = new FMOD.ATTRIBUTES_3D();
 
+
+    public FMOD.Studio.EventInstance guiObjectives { get; private set; }
+    public FMOD.Studio.EventInstance backgroundAmbient { get; private set; }
     public FMOD.Studio.EventInstance playerWeaponsEvent { get; private set; }
-    public FMOD.Studio.EventInstance doorEvent { get; private set; }
     public FMOD.Studio.PARAMETER_ID weaponSwitch { get; private set; }
-    private FMOD.Studio.EventDescription playerEventDescription;
-    private FMOD.Studio.PARAMETER_DESCRIPTION playerParameterDescription;
+    public FMOD.Studio.EventInstance doorEvent { get; private set; }
+    public FMOD.Studio.PARAMETER_ID doorSwitch { get; private set; }
 
     private int listenersNumber = 4;
     private int currentListener = 0;
     private int previousListener = 1;
     private bool crossFade = false;
 
-    private void Start()
+    private void Awake()
     {
         //Set listeners
         FMODUnity.RuntimeManager.StudioSystem.setNumListeners(listenersNumber);
@@ -35,13 +37,24 @@ public class AudioManager : Singleton<AudioManager>
             }
         }
 
+        guiObjectives = FMODUnity.RuntimeManager.CreateInstance("event:/UI/ObjectiveComplete");
+        backgroundAmbient = FMODUnity.RuntimeManager.CreateInstance("event:/Ambient/Background");
         playerWeaponsEvent = FMODUnity.RuntimeManager.CreateInstance("event:/SFX/Player/Weapons");
-        playerWeaponsEvent.getDescription(out playerEventDescription);
-        playerEventDescription.getParameterDescriptionByName("weapons", out playerParameterDescription);
+        playerWeaponsEvent.getDescription(out FMOD.Studio.EventDescription playerEventDescription);
+        playerEventDescription.getParameterDescriptionByName("weapons", out FMOD.Studio.PARAMETER_DESCRIPTION playerParameterDescription);
         weaponSwitch = playerParameterDescription.id;
+
         doorEvent = FMODUnity.RuntimeManager.CreateInstance("event:/SFX/Objects/Door");
+        doorEvent.getDescription(out FMOD.Studio.EventDescription doorEventDescription);
+        doorEventDescription.getParameterDescriptionByName("isOpen", out FMOD.Studio.PARAMETER_DESCRIPTION doorParameterDescription);
+        doorSwitch = doorParameterDescription.id;
+
     }
 
+    private void Start()
+    {
+        backgroundAmbient.start();
+    }
 
     public void Play(FMOD.Studio.EventInstance pEvent)
     {

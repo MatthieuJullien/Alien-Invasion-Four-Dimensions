@@ -14,6 +14,7 @@ public class DoorAccess : MonoBehaviour
 
     private static AudioManager audioMan;
     private FMOD.Studio.EventInstance doorEvent;
+    private FMOD.Studio.PARAMETER_ID dSwitch;
 
     private void Awake()
     {
@@ -32,25 +33,27 @@ public class DoorAccess : MonoBehaviour
 
         audioMan = AudioManager.Instance;
         doorEvent = audioMan.doorEvent;
-        Debug.Log("doorEvent is valid: " +doorEvent.isValid());
+        dSwitch = audioMan.doorSwitch;
     }
 
     public void TryOpenDoor()
     {
-        Debug.Log("doorEvent is valid: " +doorEvent.isValid());
-        Debug.Log(doorEvent.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject)));
-        audioMan.Play(doorEvent);
+        doorEvent.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject));
 
         Color color;
         if (_hasAccess)
         {
+            audioMan.SetLabeledParameter(doorEvent, dSwitch, 1);
             color = openedColor;
             _animator.SetTrigger("character_nearby");
         }
         else
         {
+            audioMan.SetLabeledParameter(doorEvent, dSwitch, 0);
             color = deniedColor;
         }
+
+        audioMan.Play(doorEvent);
 
         foreach (var l in doorLights)
         {

@@ -18,11 +18,21 @@ public class Objective : MonoBehaviour
     public ObjectiveEnum Label { get => label; }
     public Vector3 Position { get => position; }
 
+    //Audio
+    private static AudioManager audioMan;
+    private FMOD.Studio.EventInstance objectiveEvent;
+
     private void Awake()
     {
         IsCompleted = false;
         uitext.color = lockedColor;
         statutImage.sprite = lockSprite;
+    }
+
+    private void Start()
+    {
+        audioMan = AudioManager.Instance;
+        objectiveEvent = audioMan.guiObjectives;
     }
 
     public void Unlock()
@@ -34,6 +44,7 @@ public class Objective : MonoBehaviour
 
     public void Complete()
     {
+        audioMan.Play(objectiveEvent);
         IsCompleted = true;
         uitext.color = completedColor;
         uitext.fontStyle = FontStyle.Italic;
