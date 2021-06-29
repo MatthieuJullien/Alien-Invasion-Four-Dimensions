@@ -12,6 +12,9 @@ public class DoorAccess : MonoBehaviour
     private Animator _animator;
     private bool _hasAccess = false;
 
+    private static AudioManager audioMan;
+    private FMOD.Studio.EventInstance doorEvent;
+
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -26,10 +29,18 @@ public class DoorAccess : MonoBehaviour
             l.color = closedColor;
             l.intensity = closedLightIntensity;
         }
+
+        audioMan = AudioManager.Instance;
+        doorEvent = audioMan.doorEvent;
+        Debug.Log("doorEvent is valid: " +doorEvent.isValid());
     }
 
     public void TryOpenDoor()
     {
+        Debug.Log("doorEvent is valid: " +doorEvent.isValid());
+        Debug.Log(doorEvent.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject)));
+        audioMan.Play(doorEvent);
+
         Color color;
         if (_hasAccess)
         {

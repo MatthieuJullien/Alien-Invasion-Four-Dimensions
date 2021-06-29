@@ -45,17 +45,12 @@ public class Weapon : MonoBehaviour
         }
 
         audioMan = AudioManager.Instance;
-        player = GameObject.Find("Player");
-        playerRigidbody = player.GetComponent<Rigidbody>();
-        weapons = audioMan.PlayerWeaponsEvent;
-        wSwitch = audioMan.WeaponSwitch;
+        weapons = audioMan.playerWeaponsEvent;
+        wSwitch = audioMan.weaponSwitch;
     }
 
     private void Update()
     {
-        //Update 3d sound position
-        FMODUnity.RuntimeManager.AttachInstanceToGameObject(weapons, player.transform, playerRigidbody);
-
         if (reloadTimer >= reloadDuration)
         {
             IsLoaded = true;
@@ -91,6 +86,8 @@ public class Weapon : MonoBehaviour
         if (!IsLoaded)
             return;
 
+        //update 3D position
+        weapons.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(gameObject));
         //setting switch to current weapon
         audioMan.SetLabeledParameter(weapons, wSwitch, audioWeaponSwitchValue);
         //playing sound

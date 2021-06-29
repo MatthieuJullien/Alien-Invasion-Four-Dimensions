@@ -8,8 +8,9 @@ public class AudioManager : Singleton<AudioManager>
     private FMOD.ATTRIBUTES_3D currentAttributes = new FMOD.ATTRIBUTES_3D();
     private FMOD.ATTRIBUTES_3D previousAttributes = new FMOD.ATTRIBUTES_3D();
 
-    public FMOD.Studio.EventInstance PlayerWeaponsEvent { get; private set; }
-    public FMOD.Studio.PARAMETER_ID WeaponSwitch { get; private set; }
+    public FMOD.Studio.EventInstance playerWeaponsEvent { get; private set; }
+    public FMOD.Studio.EventInstance doorEvent { get; private set; }
+    public FMOD.Studio.PARAMETER_ID weaponSwitch { get; private set; }
     private FMOD.Studio.EventDescription playerEventDescription;
     private FMOD.Studio.PARAMETER_DESCRIPTION playerParameterDescription;
 
@@ -34,10 +35,11 @@ public class AudioManager : Singleton<AudioManager>
             }
         }
 
-        PlayerWeaponsEvent = FMODUnity.RuntimeManager.CreateInstance("event:/SFX/Player/Weapons");
-        PlayerWeaponsEvent.getDescription(out playerEventDescription);
+        playerWeaponsEvent = FMODUnity.RuntimeManager.CreateInstance("event:/SFX/Player/Weapons");
+        playerWeaponsEvent.getDescription(out playerEventDescription);
         playerEventDescription.getParameterDescriptionByName("weapons", out playerParameterDescription);
-        WeaponSwitch = playerParameterDescription.id;
+        weaponSwitch = playerParameterDescription.id;
+        doorEvent = FMODUnity.RuntimeManager.CreateInstance("event:/SFX/Objects/Door");
     }
 
 
