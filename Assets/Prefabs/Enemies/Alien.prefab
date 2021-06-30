@@ -3314,7 +3314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3277d9caa85d49499d16b41f0166d38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealthPoints: 120
+  maxHealthPoints: 90
   TakeDamageEvent:
     m_PersistentCalls:
       m_Calls:

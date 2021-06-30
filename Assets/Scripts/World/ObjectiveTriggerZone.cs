@@ -3,6 +3,8 @@ using UnityEngine;
 public class ObjectiveTriggerZone : TriggerZone
 {
     [SerializeField] private ObjectiveEnum objectiveLabel;
+    [SerializeField] private ObjectiveTriggerZone[] sameObjectiveTriggers;
+
     private bool delete = false;
     private float shrinkFactor = 1f;
 
@@ -11,12 +13,14 @@ public class ObjectiveTriggerZone : TriggerZone
         int otherLayerMask = 1 << other.gameObject.layer;
         if ((triggerLayers.value & otherLayerMask) != otherLayerMask) return;
 
-        print("enter");
         if (ObjectiveManager.Instance.CompleteObjective(objectiveLabel))
         {
-            print("complete ovjective");
             enterAction.Invoke();
             delete = true;
+            foreach (var trigger in sameObjectiveTriggers)
+            {
+                trigger.delete = true;
+            }
         }
     }
 

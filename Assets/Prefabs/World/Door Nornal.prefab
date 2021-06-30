@@ -551,7 +551,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5585820267331f449b1da7b3b630bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorLights: []
+  doorLights:
+  - {fileID: 4785846345974711120}
+  - {fileID: 241876480}
+  requiredObjective: 0
   openedLightIntensity: 1.2
   closedLightIntensity: 0.9
   deniedColor: {r: 1, g: 0, b: 0, a: 0}

@@ -3,6 +3,8 @@ using UnityEngine;
 public class DoorAccess : MonoBehaviour
 {
     [SerializeField] private Light[] doorLights;
+    [SerializeField] private ObjectiveEnum requiredObjective;
+
     [SerializeField] private float openedLightIntensity;
     [SerializeField] private float closedLightIntensity;
     [SerializeField] private Color deniedColor;
@@ -34,7 +36,8 @@ public class DoorAccess : MonoBehaviour
         if (_hasAccess)
         {
             color = openedColor;
-            _animator.SetTrigger("character_nearby");
+            if (_animator != null)
+                _animator.SetTrigger("character_nearby");
         }
         else
         {
@@ -51,7 +54,8 @@ public class DoorAccess : MonoBehaviour
 
     public void TryCloseDoor()
     {
-        _animator.ResetTrigger("character_nearby");
+        if (_animator != null)
+            _animator.ResetTrigger("character_nearby");
     }
 
     private void ResetLight()
@@ -65,7 +69,7 @@ public class DoorAccess : MonoBehaviour
 
     public void OnAccessGained(ObjectiveEnum objectiveLabel)
     {
-        if (objectiveLabel != ObjectiveEnum.GetAccessCodes) return;
+        if (objectiveLabel != requiredObjective) return;
         _hasAccess = true;
     }
 }

@@ -9,10 +9,12 @@ public class PlayerHandler : MonoBehaviour
     [SerializeField] private GameObject fpsWorkTools;
     [SerializeField] private GameObject worldMechanicModels;
     [SerializeField] private GameObject worldNoUniformModels;
+    [SerializeField] private Crosshair crosshair;
 
     private Health _health;
     private PlayerWeaponController _playerWeaponController;
-    private bool _hasMechanicUniform;
+
+    public bool HasMechanicUniform { get; private set; }
 
     private void Awake()
     {
@@ -22,7 +24,7 @@ public class PlayerHandler : MonoBehaviour
 
     private void Start()
     {
-        _hasMechanicUniform = true;
+        HasMechanicUniform = true;
         _playerWeaponController.enabled = false;
         worldNoUniformModels.SetActive(false);
         healthBar.text = "HP = " + _health.HealthPoints;
@@ -30,7 +32,7 @@ public class PlayerHandler : MonoBehaviour
 
     private void Update()
     {
-        if (_hasMechanicUniform)
+        if (HasMechanicUniform)
         {
             bool fpsView = GameManager.Instance.IsCurrentViewFPS;
             fpsWorkTools.SetActive(fpsView);
@@ -66,11 +68,15 @@ public class PlayerHandler : MonoBehaviour
     // replace with pickups + weapon inventory
     public void TakeWeapons()
     {
-        _hasMechanicUniform = false;
+        HasMechanicUniform = false;
+
         fpsWorkTools.SetActive(false);
         worldMechanicModels.SetActive(false);
         worldNoUniformModels.SetActive(true);
         _playerWeaponController.enabled = true;
         _playerWeaponController.EquipWeapon(0);
+
+        crosshair.HasWeapons = true;
+        crosshair.UpdateCrosshairVisibility();
     }
 }

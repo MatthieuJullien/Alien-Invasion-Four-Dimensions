@@ -8,9 +8,13 @@ public class Crosshair : MonoBehaviour
     private bool isViewFps = false;
     private GameManager gameManager;
 
+    public bool HasWeapons { private get; set; }
+
     private void Start()
     {
         gameManager = GameManager.Instance;
+        crosshairImage.enabled = false;
+        HasWeapons = false;
     }
 
     private void Update()
@@ -18,7 +22,12 @@ public class Crosshair : MonoBehaviour
         if (gameManager.IsCurrentViewFPS != isViewFps)
         {
             isViewFps = gameManager.IsCurrentViewFPS;
-            crosshairImage.enabled = (isViewFps);
+            UpdateCrosshairVisibility();
         }
+    }
+
+    public void UpdateCrosshairVisibility()
+    {
+        crosshairImage.enabled = (isViewFps && HasWeapons);
     }
 }
