@@ -12,6 +12,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private Camera worldCamera;
     [SerializeField] private Camera isoCamera;
     [SerializeField] private MinimapCameraController minimap;
+    [SerializeField] private Fader fader;
 
     [SerializeField] private Transform worldWeaponTransform;
     [SerializeField] private Transform playerTransform;
@@ -38,7 +39,6 @@ public class GameManager : Singleton<GameManager>
     public override void Awake()
     {
         base.Awake();
-        ViewPoint = startingViewPoint; // dangerous way to tell other class what is the starting viewpoint
     }
 
     private void Start()
@@ -100,7 +100,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private void UpdateControlSettings()
+    private void SetControlSettings()
     {
         switch (ViewPoint)
         {
@@ -128,8 +128,46 @@ public class GameManager : Singleton<GameManager>
 
     public void SelectIso()
     {
-        //change listener
+        if (ViewPoint == PlayerViewPoint.Isometric) return;
+
         audioMan.SetListenerCamera(isoCamera);
+        fader.CameraSwitchEvent.RemoveAllListeners();
+        fader.CameraSwitchEvent.AddListener(Iso);
+        fader.CameraTransition();
+    }
+
+    public void SelectTopDown()
+    {
+        if (ViewPoint == PlayerViewPoint.TopDown) return;
+
+        audioMan.SetListenerCamera(worldCamera);
+        fader.CameraSwitchEvent.RemoveAllListeners();
+        fader.CameraSwitchEvent.AddListener(TopDown);
+        fader.CameraTransition();
+    }
+
+    public void SelectSideView()
+    {
+        if (ViewPoint == PlayerViewPoint.SideView) return;
+
+        audioMan.SetListenerCamera(worldCamera);
+        fader.CameraSwitchEvent.RemoveAllListeners();
+        fader.CameraSwitchEvent.AddListener(SideView);
+        fader.CameraTransition();
+    }
+
+    public void SelectFPS()
+    {
+        if (ViewPoint == PlayerViewPoint.FirstPerson) return;
+
+        audioMan.SetListenerCamera(fpsCamera);
+        fader.CameraSwitchEvent.RemoveAllListeners();
+        fader.CameraSwitchEvent.AddListener(Fps);
+        fader.CameraTransition();
+    }
+
+    private void Iso()
+    {
         ViewPoint = PlayerViewPoint.Isometric;
 
         playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
@@ -139,12 +177,11 @@ public class GameManager : Singleton<GameManager>
 
         SetCamera(isoCamera);
         minimap.ToggleViewpoint(IsCurrentViewFPS);
-        UpdateControlSettings();
+        SetControlSettings();
     }
 
-    public void SelectTopDown()
+    private void TopDown()
     {
-        audioMan.SetListenerCamera(worldCamera);
         ViewPoint = PlayerViewPoint.TopDown;
 
         playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
@@ -152,12 +189,11 @@ public class GameManager : Singleton<GameManager>
 
         SetCamera(worldCamera);
         minimap.ToggleViewpoint(IsCurrentViewFPS);
-        UpdateControlSettings();
+        SetControlSettings();
     }
 
-    public void SelectSideView()
+    private void SideView()
     {
-        audioMan.SetListenerCamera(worldCamera);
         ViewPoint = PlayerViewPoint.SideView;
 
         playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
@@ -170,22 +206,21 @@ public class GameManager : Singleton<GameManager>
 
         SetCamera(worldCamera);
         minimap.ToggleViewpoint(IsCurrentViewFPS);
-        UpdateControlSettings();
+        SetControlSettings();
     }
 
-    public void SelectFPS()
+    private void Fps()
     {
-        audioMan.SetListenerCamera(fpsCamera);
         ViewPoint = PlayerViewPoint.FirstPerson;
 
         playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 
         SetCamera(fpsCamera);
         minimap.ToggleViewpoint(IsCurrentViewFPS);
-        UpdateControlSettings();
+        SetControlSettings();
     }
 
-    private void SetCamera(Camera cam)
+    public void SetCamera(Camera cam)
     {
         fpsCamera.enabled = fpsCamera == cam;
         worldCamera.enabled = worldCamera == cam;
