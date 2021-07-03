@@ -14,10 +14,10 @@ public abstract class Projectile : MonoBehaviour
 
     protected void Start()
     {
-        Physics.IgnoreLayerCollision(9, 9);
-        Physics.IgnoreLayerCollision(9, 8);
-        Physics.IgnoreLayerCollision(9, 7);
-        Physics.IgnoreLayerCollision(9, 6);
+        Physics.IgnoreLayerCollision(9, 9); // ProjectilePlayer
+        Physics.IgnoreLayerCollision(9, 8); // Player
+        Physics.IgnoreLayerCollision(9, 7); // FirstPersonView
+        Physics.IgnoreLayerCollision(9, 6); // WorldView
         from = transform.position;
     }
 

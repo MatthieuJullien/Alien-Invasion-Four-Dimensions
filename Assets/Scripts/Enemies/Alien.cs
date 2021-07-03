@@ -107,12 +107,13 @@ public class Alien : MonoBehaviour
     private void Start()
     {
         _navMeshObstacle.enabled = false;
-        _navMeshAgent.avoidancePriority = Mathf.RoundToInt(UnityEngine.Random.Range(0f, 30f));
+        _navMeshAgent.avoidancePriority = Random.Range(0, 35);
+        _navMeshAgent.speed += (Random.value - 0.5f) / 2f;
         _duplicationTimer = duplicationInterval;
         _targetPosition = transform.position;
         alienRenderer.material = respawnMaterial;
         _nbMaxColliderToSpawn = _thisColliders.Length;
-        _pursuitPredictionStrength = Random.value * 2f - 0.5f;
+        _pursuitPredictionStrength = Random.value * 2.5f - 0.75f;
     }
 
     private void Update()
@@ -179,7 +180,7 @@ public class Alien : MonoBehaviour
         _navMeshObstacle.enabled = false;
         _navMeshAgent.enabled = true;
         ChangeAnimation(MOVE_ANIM);
-        _navMeshAgent.destination = ChooseRandomTarget(); ;
+        _navMeshAgent.destination = ChooseRandomTarget();
     }
 
     private void StartPursuit()

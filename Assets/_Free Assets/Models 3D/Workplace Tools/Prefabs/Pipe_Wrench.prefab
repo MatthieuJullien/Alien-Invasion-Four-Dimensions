@@ -44,7 +44,6 @@ GameObject:
   - component: {fileID: 4000013724329708}
   - component: {fileID: 33000012973274516}
   - component: {fileID: 23000013316413590}
-  - component: {fileID: 64000011564461148}
   m_Layer: 0
   m_Name: Pipe_Wrench_Top
   m_TagString: Untagged
@@ -116,20 +115,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &64000011564461148
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000013132658670}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300002, guid: 04f2bab5eb13736478f88351a1d64bee, type: 3}
 --- !u!1 &1000013300987128
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,7 +126,6 @@ GameObject:
   - component: {fileID: 4000012607030256}
   - component: {fileID: 33000011488093020}
   - component: {fileID: 23000012920381782}
-  - component: {fileID: 64000012369552426}
   m_Layer: 0
   m_Name: Pipe_Wrench_Wheel
   m_TagString: Untagged
@@ -212,20 +196,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &64000012369552426
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000013300987128}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300004, guid: 04f2bab5eb13736478f88351a1d64bee, type: 3}
 --- !u!1 &1000014122037732
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,7 +207,6 @@ GameObject:
   - component: {fileID: 4000014221265656}
   - component: {fileID: 33000010473424938}
   - component: {fileID: 23000013660177494}
-  - component: {fileID: 64000011958360796}
   m_Layer: 0
   m_Name: Pipe_Wrench_Handle
   m_TagString: Untagged
@@ -309,17 +278,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &64000011958360796
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000014122037732}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300006, guid: 04f2bab5eb13736478f88351a1d64bee, type: 3}
