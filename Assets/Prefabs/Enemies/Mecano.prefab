@@ -1717,7 +1717,6 @@ MonoBehaviour:
   deathDuration: 5
   maxSight: 15
   toolsL:
-  - {fileID: 1968301911228824, guid: 5f51a2d72c55f9f4788ea118ddccce4a, type: 3}
   - {fileID: 1000010671269162, guid: 537ab85af9f24fe42aeca34f12e70e40, type: 3}
   - {fileID: 1000013166527964, guid: 0a2dc1ad5bdadac469dbbf86dbb08eb9, type: 3}
   - {fileID: 1000012695253110, guid: f5a2d19d564785d45a6207078113bcaa, type: 3}
@@ -1726,7 +1725,6 @@ MonoBehaviour:
   - {fileID: 1000010884548538, guid: 70870a0dc2abff84c9a4587c5beb11d2, type: 3}
   - {fileID: 1000014031835130, guid: ebcc6d962399b194e8f25886f0cd0762, type: 3}
   - {fileID: 1000010148899198, guid: 3fe5e5b169873104ca3a52a601994ea5, type: 3}
-  - {fileID: 1000010937655234, guid: 06dcb61061163fd48b2b7111fa8e6e33, type: 3}
   - {fileID: 1000010297929006, guid: 436e0a09a3d234b42b4637838878fd88, type: 3}
   - {fileID: 1000011891957680, guid: e2213544abe0a9548a2bf8428f0a1a78, type: 3}
   - {fileID: 1000011343778870, guid: 77496b3371ad12e44a303ff403f0596b, type: 3}
@@ -1736,7 +1734,7 @@ MonoBehaviour:
   deathVFX: {fileID: 8471834160227126305, guid: 305699eaec24c544882afbe9614a0a4c,
     type: 3}
   turnSpeed: 1
-  targetChangeInterval: 8
+  targetChangeInterval: 10
 --- !u!114 &3099550184719176791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1775,11 +1773,11 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 2.2
+  m_Speed: 1.6
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 1
+  m_StoppingDistance: 2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

@@ -76,7 +76,7 @@ public class EnemyMecano : MonoBehaviour
         _playerMovement = _playerGameObject.GetComponent<MultipleViewPlayerController>();
 
         workPositions.Add(transform.position);
-        if (workPositions.Count > nbMecanos) Destroy(this.gameObject);
+        if (Random.value > 0.35f) Destroy(this.gameObject);
     }
 
     private void Start()
@@ -170,7 +170,7 @@ public class EnemyMecano : MonoBehaviour
     {
         _state = State.Work;
         ChangeAnimation(WORK_ANIM);
-        heureSupps = Random.value * 8;
+        heureSupps = Random.value * 10;
         _lastStartToWork = Time.time;
     }
 
