@@ -74,9 +74,6 @@ public class MultipleViewPlayerController : BaseCharacterController
 
     protected override void HandleInput()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-            pause = !pause;
-
         int forward = 0;
         int right = 0;
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.Z))

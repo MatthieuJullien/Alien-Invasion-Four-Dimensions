@@ -63,6 +63,7 @@ public class PlayerHandler : MonoBehaviour
     public void HackAccessCodes()
     {
         print("You have hacked the system and stolen then pilot codes!");
+        Soldier.CodeRed = true;
     }
 
     // replace with pickups + weapon inventory

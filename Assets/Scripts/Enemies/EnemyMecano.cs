@@ -55,7 +55,6 @@ public class EnemyMecano : MonoBehaviour
 
     private State _state;
     private float _lastStartToWork = Mathf.NegativeInfinity;
-    private bool _isIdle = false;
     private float _fleePredictionDelta;
     private float defaultSpeed;
 

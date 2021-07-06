@@ -24,7 +24,6 @@ public class Alien : MonoBehaviour
     [SerializeField] private Material respawnMaterial;
     [SerializeField] private Material activeMaterial;
 
-
     [Header("Duplication")]
     [SerializeField] private float duplicationInterval = 10f;
     [SerializeField] private int maxDuplication = 2;
@@ -78,11 +77,6 @@ public class Alien : MonoBehaviour
         CancelInvoke(nameof(BackToPreviousAnim));
         _previousAnim = _currentAnim;
         _currentAnim = anim;
-    }
-
-    public bool IsDead
-    {
-        get => _health.IsDead;
     }
 
     private float DistanceToPlayer => Vector3.Distance(transform.position, _playerTransform.position);
@@ -336,7 +330,7 @@ public class Alien : MonoBehaviour
 
         Gizmos.DrawLine(transform.position, _navMeshAgent.destination);
         Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(_navMeshAgent.destination, 1f);
+        Gizmos.DrawSphere(_navMeshAgent.destination, 0.2f);
     }
 
     public void OnTakeDamage()

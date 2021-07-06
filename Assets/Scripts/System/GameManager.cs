@@ -23,6 +23,17 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private MovementConfig fpsMvtCfg;
     [SerializeField] private MovementConfig isoMvtCfg;
 
+    [Header("Debug")]
+    [SerializeField] private GameObject alienQueenPrefab;
+    [SerializeField] private GameObject cheatCanvas;
+
+    public void SpawnQueen()
+    {
+        var pos = playerTransform.position;
+        pos.y += 2f;
+        Instantiate(alienQueenPrefab, pos, Quaternion.identity);
+    }
+
     private AudioManager audioMan;
 
     private Rigidbody playerRigidbody;
@@ -35,6 +46,8 @@ public class GameManager : Singleton<GameManager>
     public bool IsCurrentViewFPS { get => (ViewPoint == PlayerViewPoint.FirstPerson); }
     public PlayerViewPoint ViewPoint { get; private set; }
     public Camera CurrentCamera { get; private set; }
+
+
 
     public override void Awake()
     {
@@ -60,8 +73,12 @@ public class GameManager : Singleton<GameManager>
     {
         if (Input.GetMouseButtonDown(1))
         {
-            ChangeToNextViewPoint();
+            bool shouldShowCheats = !cheatCanvas.activeSelf;
+            cheatCanvas.SetActive(shouldShowCheats);
+            Cursor.lockState = shouldShowCheats ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = shouldShowCheats;
         }
+
         //isCurrentViewFPS = (ViewPoint == PlayerViewPoint.FirstPerson);
     }
 

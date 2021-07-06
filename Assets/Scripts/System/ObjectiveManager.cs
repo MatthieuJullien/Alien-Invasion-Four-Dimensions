@@ -81,4 +81,11 @@ public class ObjectiveManager : Singleton<ObjectiveManager>
             effect.Play();
         }
     }
+
+    public void WarpToObjective()
+    {
+        var pos = CurrentObjectivePosition;
+        pos += Vector3.up * 5f;
+        FindObjectOfType<PlayerHandler>().transform.position = pos;
+    }
 }

@@ -79,4 +79,13 @@ public class PlayerWeaponController : MonoBehaviour
         currentWeaponIndex = weaponToEquipIndex;
         weapons[weaponToEquipIndex].Equip(true);
     }
+
+    public void FasterReload()
+    {
+        foreach (var weapon in weapons)
+        {
+            weapon.reloadDuration = Mathf.Max(0.1f, weapon.reloadDuration - 0.1f);
+            print(weapon.reloadDuration);
+        }
+    }
 }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1973279597932838363}
   m_Layer: 0
   m_Name: WorldCamera Top
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -63,7 +63,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1655
+    m_Bits: 9847
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -89,7 +89,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTransform: {fileID: 0}
   distanceToTarget: 15
-  followSpeed: 3
+  followSpeed: 3.3
 --- !u!1 &1973279598153144872
 GameObject:
   m_ObjectHideFlags: 0
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 1973279598334819520}
   m_Layer: 0
   m_Name: Camera Isometric
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -148,8 +148,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2532892230435021997}
-  m_LocalRotation: {x: 0.23911765, y: 0.3696438, z: -0.09904577, w: 0.89239913}
-  m_LocalPosition: {x: -58.260986, y: 23.120808, z: -11.85154}
+  m_LocalRotation: {x: 0.36977875, y: -0.023687957, z: 0.009434101, w: 0.92876995}
+  m_LocalPosition: {x: 15.401016, y: 70.37408, z: -59.476837}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1973279598153144873}
@@ -186,7 +186,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 2039
+    m_Bits: 10231
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -220,4 +220,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTransform: {fileID: 0}
   distanceToTarget: 50
-  followSpeed: 3
+  followSpeed: 3.3
